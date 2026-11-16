@@ -1,0 +1,74 @@
+x-database-env: &database-env
+  POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+  POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+  DATABASE_HOST: db
+  DATABASE_PORT: 5432
+
+x-backend: &backend
+  image: ${DOCKER_IMAGE:-afrokirill/a-courses:1.0}
+  env_file: .env
+  environment: *database-env
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  migrate:
+    <<: *backend
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+  demo:
+    <<: *backend
+    command:
+      - sh
+      - -c
+      - python -m src.load_demo && python -m src.sync_materials && python -m src.import_material_annotations && python -m src.sync_materials
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+  backend:
+    <<: *backend
+    environment:
+      <<: *database-env
+      HOST: 0.0.0.0
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      demo:
+        condition: service_completed_successfully
+  frontend:
+    image: forestrain12/alfa-course-frontend:latest
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        cat > /etc/nginx/conf.d/default.conf <<'EOF'
+        server {
+          listen 80;
+          root /usr/share/nginx/html;
+          location /api/ { proxy_pass http://backend:8000; }
+          location /demo-files/ { proxy_pass http://backend:8000; }
+          location / { try_files $$uri $$uri/ /index.html; }
+        }
+        EOF
+        exec nginx -g 'daemon off;'
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
