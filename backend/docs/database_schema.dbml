@@ -1,0 +1,613 @@
+Project alfa_backend_simplified {
+  database_type: 'PostgreSQL'
+  Note: 'Таблицы public — сокращённые представления дампа; таблицы mvp — проект. Каталог поддерживает курсы, статьи и документы. Это схема для обсуждения, не готовая миграция.'
+}
+
+Table public."Courses" as t_1 {
+  Note: 'ДАМП. Каталог курсов: название, описание, длительность, статус, доступность и историческая стоимость.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext [not null]
+  "Target" citext
+  "Duration" varchar(255)
+  "LessonQuantity" integer [not null]
+  "StatusId" uuid [not null, ref: > t_2."Id"]
+  "TypeId" uuid [ref: > t_36."Id"]
+  "IsDeleted" boolean [not null]
+  "IsClosed" boolean [not null]
+  "Cost" integer
+  "Url" citext [not null]
+}
+
+Table public."Statuses" as t_2 {
+  Note: 'ДАМП. Справочник статусов публикации материалов, в том числе курсов.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+}
+
+Table public."Lessons" as t_3 {
+  Note: 'ДАМП. Уроки: название, описание, длительность и признак удаления.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext
+  "Duration" varchar(32)
+  "IsDeleted" boolean [not null]
+}
+
+Table public."CourseLessonBindings" as t_4 {
+  Note: 'ДАМП. Состав курса: связывает курсы с уроками и хранит порядок и признак пробного урока.'
+  "CourseId" uuid [not null, ref: > t_1."Id"]
+  "LessonId" uuid [not null, ref: > t_3."Id"]
+  "Order" integer
+  "IsTrial" boolean [not null]
+  "IsDeleted" boolean [not null]
+  indexes {
+    ("CourseId", "LessonId") [pk]
+  }
+}
+
+Table public."CourseInfoTypes" as t_5 {
+  Note: 'ДАМП. Справочник типов дополнительной информации о курсе.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+}
+
+Table public."CourseTariffBindings" as t_6 {
+  Note: 'ДАМП. Тарифы разовой покупки курсов и их историческая стоимость.'
+  "Id" uuid [pk]
+  "CourseId" uuid [not null, ref: > t_1."Id"]
+  "Title" citext [not null]
+  "Cost" integer [not null]
+  "Description" citext
+}
+
+Table public."CourseInfoBindings" as t_7 {
+  Note: 'ДАМП. Дополнительные сведения о курсе и, при наличии, привязка к тарифу курса.'
+  "Id" uuid [pk]
+  "CourseId" uuid [not null, ref: > t_1."Id"]
+  "CourseInfoTypeId" uuid [not null, ref: > t_5."Id"]
+  "CourseTariffId" uuid [ref: > t_6."Id"]
+  "Title" citext [not null]
+  "Description" citext
+  "Order" integer
+}
+
+Table public."ContentSettings" as t_8 {
+  Note: 'ДАМП. Настройки классификации материалов. EntityId и EntityTypeId задают полиморфную связь с материалом; прямого внешнего ключа на курс нет.'
+  "Id" uuid [pk]
+  "EntityId" uuid [not null, note: 'Полиморфная ссылка: сопоставление с курсом через EntityTypeId; FK в дампе нет']
+  "EntityTypeId" uuid [not null]
+  "StatusId" uuid [not null]
+  "IsDeleted" boolean [not null]
+}
+
+Table public."Topics" as t_9 {
+  Note: 'ДАМП. Справочник тем материалов.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+}
+
+Table public."Tags" as t_10 {
+  Note: 'ДАМП. Справочник тегов материалов.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+}
+
+Table public."Industries" as t_11 {
+  Note: 'ДАМП. Справочник отраслей для классификации материалов.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+}
+
+Table public."ContentSettingsTopics" as t_12 {
+  Note: 'ДАМП. Связь настроек материала с темами и их порядок.'
+  "ContentSettingsId" uuid [not null, ref: > t_8."Id"]
+  "TopicId" uuid [not null, ref: > t_9."Id"]
+  "Order" integer [not null]
+  indexes {
+    ("ContentSettingsId", "TopicId") [pk]
+  }
+}
+
+Table public."ContentSettingsTags" as t_13 {
+  Note: 'ДАМП. Связь настроек материала с тегами и их порядок.'
+  "ContentSettingsId" uuid [not null, ref: > t_8."Id"]
+  "TagId" uuid [not null, ref: > t_10."Id"]
+  "Order" integer [not null]
+  indexes {
+    ("ContentSettingsId", "TagId") [pk]
+  }
+}
+
+Table public."ContentSettingsIndustries" as t_14 {
+  Note: 'ДАМП. Связь настроек материала с отраслями и их порядок.'
+  "ContentSettingsId" uuid [not null, ref: > t_8."Id"]
+  "IndustryId" uuid [not null, ref: > t_11."Id"]
+  "Order" integer [not null]
+  indexes {
+    ("ContentSettingsId", "IndustryId") [pk]
+  }
+}
+
+Table public."CourseUserBindings" as t_15 {
+  Note: 'ДАМП. Связь пользователя платформы с курсом, включая статус и прогресс. UserId не ссылается на таблицу пользователей в дампе.'
+  "Id" uuid [pk]
+  "CourseId" uuid [not null, ref: > t_1."Id"]
+  "UserId" uuid [not null, note: 'Идентификатор исходной платформы; FK пользователя в дампе отсутствует']
+  "IsCompleted" boolean [not null]
+  "Completed" timestamptz
+  "StudyingStartDate" timestamptz
+  "LessonsCompleted" integer [not null]
+  "IsPaid" boolean [not null]
+  "SubscriptionId" uuid [note: 'FK в дампе отсутствует; не доказывает активную подписку']
+  "IsDeleted" boolean [not null]
+}
+
+Table public."CourseUserLessonBindings" as t_16 {
+  Note: 'ДАМП. Прогресс пользователя по урокам в рамках связи с курсом.'
+  "Id" uuid [pk]
+  "CourseUserId" uuid [not null, ref: > t_15."Id"]
+  "LessonId" uuid [not null, ref: > t_3."Id"]
+  "StudyingStartDate" timestamptz
+  "Completed" timestamptz
+}
+
+Table public."UserRatings" as t_17 {
+  Note: 'ДАМП. Пользовательские оценки материалов. Тип материала задаётся EntityTypeId; UserId может отсутствовать.'
+  "Id" uuid [pk]
+  "UserId" uuid
+  "EntityId" uuid [not null, note: 'Полиморфная ссылка: определять тип через EntityTypeId']
+  "EntityTypeId" uuid [not null]
+  "Value" smallint [not null]
+  "Created" timestamptz [not null]
+  "IsDeleted" boolean [not null]
+}
+
+Table public."RatingTags" as t_18 {
+  Note: 'ДАМП. Справочник тегов для пользовательских оценок.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+}
+
+Table public."UserRatingTagsBindings" as t_19 {
+  Note: 'ДАМП. Связь оценки с тегами обратной связи и необязательным текстом.'
+  "UserRatingId" uuid [not null, ref: > t_17."Id"]
+  "TagId" uuid [not null, ref: > t_18."Id"]
+  "Text" varchar(500)
+  indexes {
+    ("UserRatingId", "TagId") [pk]
+  }
+}
+
+Table public."Subscription" as t_20 {
+  Note: 'ДАМП. Справочник подписок; сам по себе не подтверждает активный доступ конкретного пользователя.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext
+  "IsDeleted" boolean [not null]
+}
+
+Table public."SubscriptionTariffs" as t_21 {
+  Note: 'ДАМП. Тарифы подписок с историческими ценами и параметрами периодичности.'
+  "Id" uuid [pk]
+  "SubscriptionId" uuid [not null, ref: > t_20."Id"]
+  "Title" citext [not null]
+  "Cost" integer [not null]
+  "DiscountCost" integer
+  "Recurrence" integer [not null]
+  "RecurrenceValue" integer [not null]
+}
+
+Table public."CourseSubscriptions" as t_22 {
+  Note: 'ДАМП. Связь курсов с подписками, в которые они входят.'
+  "CourseId" uuid [not null, ref: > t_1."Id"]
+  "SubscriptionId" uuid [not null, ref: > t_20."Id"]
+  indexes {
+    ("CourseId", "SubscriptionId") [pk]
+  }
+}
+
+Table public."RecommendedItems" as t_23 {
+  Note: 'ДАМП. Существующие связи рекомендованных материалов; не является подтверждённым журналом персональных рекомендаций.'
+  "Id" uuid [not null]
+  "ItemId" uuid [not null]
+  "ItemTypeId" uuid [not null]
+  "CourseId" uuid [note: 'В дампе нет FK; семантику связи уточнить']
+  "Order" integer
+  indexes {
+    ("Id", "ItemId", "ItemTypeId") [pk]
+  }
+}
+
+// ДАМП: добавлены сокращённые представления статей и документов.
+Table public."Articles" as n_articles {
+  Note: 'ДАМП. Статьи: описание, содержание, публикация и доступность. Показаны не все поля и связи исходной таблицы.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext
+  "Content" citext
+  "Duration" citext
+  "Url" citext [not null]
+  "StatusId" uuid [not null, ref: > t_2."Id"]
+  "SubjectId" uuid [ref: > n_article_subjects."Id"]
+  "IsLesson" boolean [not null]
+  "IsPublic" boolean [not null]
+  "IsClosed" boolean [not null]
+  "IsDeleted" boolean [not null]
+  "Published" timestamptz
+}
+
+Table public."DocumentTypes" as n_document_types {
+  Note: 'ДАМП. Справочник типов документов; показаны основные поля.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext
+  "IsDeleted" boolean [not null]
+}
+
+Table public."Files" as n_files {
+  Note: 'ДАМП. Файлы материалов, включая документы; показаны основные поля.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Url" text [not null]
+  "Size" bigint [not null]
+  "Extension" text [not null]
+  "IsDeleted" boolean [not null]
+}
+
+Table public."Documents" as n_documents {
+  Note: 'ДАМП. Документы и шаблоны, включая тип и ссылку на файл. Показаны не все поля исходной таблицы; у FileIdNew внешнего ключа в дампе нет.'
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext
+  "Url" citext [not null]
+  "TypeId" uuid [not null, ref: > n_document_types."Id"]
+  "FileId" uuid [ref: > n_files."Id"]
+  "FileIdNew" uuid
+  "Extension" varchar(7)
+  "Size" integer
+  "StatusId" uuid [not null, ref: > t_2."Id"]
+  "IsDeleted" boolean [not null]
+  "Published" timestamptz
+}
+
+Table mvp.users as t_24 {
+  Note: 'MVP. Самостоятельные учётные записи по электронной почте и паролю. Исторические пользователи дампа не связываются с новыми аккаунтами.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  email text [not null, unique]
+  password_hash text [not null, note: 'Хэш пароля; пароль в открытом виде не хранится']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table mvp.onboarding_responses as t_25 {
+  Note: 'MVP. История отправленных полных, частичных и пропущенных анкет. answers различает ответ, пропуск и сброс. Пропуск при повторной анкете не стирает профиль. completed_at заполняется только при полном завершении; категория ответа проверяется backend по версии анкеты.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  answers jsonb [not null]
+  form_type text [not null, check: `form_type IN ('simple', 'advanced')`]
+  questionnaire_version text [not null, note: 'Версия определения формы в конфигурации']
+  status text [not null, check: `status IN ('partial', 'completed', 'skipped')`]
+  created_at timestamptz [not null, default: `now()`]
+  submitted_at timestamptz [not null, default: `now()`]
+  completed_at timestamptz
+  checks {
+    `(status = 'completed' AND completed_at IS NOT NULL) OR (status <> 'completed' AND completed_at IS NULL)` [name: 'onboarding_completion_state']
+    `submitted_at >= created_at` [name: 'onboarding_time_order']
+  }
+  indexes {
+    (user_id, submitted_at)
+  }
+}
+
+Table mvp.recommendation_lists as t_26 {
+  Note: 'MVP. Сохранённая витрина или карта пользователя, без статусов выполнения отдельных шагов. Общая отметка материала читается из user_material_studies по пользователю и материалу, не сохраняется в снимке карты. Гостевые ответы и результаты не сохраняются здесь до регистрации. Фиксирует использованный контекст и версию отбора. title/summary описывают траекторию, saved_at означает явное сохранение. При указанной анкете backend проверяет её принадлежность пользователю. Контекст не содержит email и полного журнала действий.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  onboarding_response_id uuid [ref: > t_25.id]
+  list_type text [not null, default: 'feed', check: `list_type IN ('feed', 'trajectory')`]
+  mode text [not null, check: `mode IN ('popular', 'personalized')`]
+  recommendation_format text [check: `recommendation_format IN ('quick', 'medium', 'deep')`, note: 'Для popular не задаётся']
+  context_snapshot jsonb [not null]
+  ranking_version text [not null]
+  ranking_config jsonb [not null]
+  title text
+  summary text
+  saved_at timestamptz
+  generation_run_id uuid [ref: > n_generation_runs.id]
+  created_at timestamptz [not null, default: `now()`]
+  checks {
+    `(mode = 'popular' AND list_type = 'feed' AND recommendation_format IS NULL) OR (mode = 'personalized' AND ((list_type = 'feed' AND recommendation_format IN ('quick', 'medium')) OR (list_type = 'trajectory' AND recommendation_format = 'deep')) AND recommendation_format IS NOT NULL)` [name: 'recommendation_mode_format']
+  }
+  indexes {
+    (user_id, created_at)
+  }
+}
+
+Table mvp.recommendation_items as t_27 {
+  Note: 'MVP. Материалы витрины или шаги траектории. explanation и offer_text сохраняют персональное объяснение. score является оценкой ранжировщика, не вероятностью. step_role и transition_text заполняются для траекторий. В MVP материалом может быть курс, статья или документ.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  list_id uuid [not null, ref: > t_26.id]
+  material_id uuid [not null, ref: > n_materials.id]
+  position integer [not null, check: `position > 0`, note: 'Позиция с 1']
+  explanation text
+  offer_text text
+  selection_kind text [not null, check: `selection_kind IN ('relevance', 'exploration', 'fallback')`]
+  score "double precision"
+  step_role text [check: `step_role IN ('intro', 'practice', 'advanced')`]
+  transition_text text [note: 'Объяснение перехода от предыдущего шага к текущему; у первого шага NULL']
+  generation_run_id uuid [ref: > n_generation_runs.id]
+  indexes {
+    (list_id, material_id) [unique]
+    (list_id, position) [unique]
+    material_id
+  }
+}
+
+Table mvp.favorite_folders as t_35 {
+  Note: 'MVP. Backend создаёт папку по умолчанию при регистрации, проверяет владельца и не разрешает удалить её. В PostgreSQL нужен частичный уникальный индекс по user_id для is_default = true; DBML его не создаёт.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  name text [not null, note: 'Название папки']
+  is_default boolean [not null, default: false]
+  created_at timestamptz [not null, default: `now()`]
+  indexes {
+    user_id
+  }
+}
+
+Table mvp.favorites as t_28 {
+  Note: 'MVP. Избранные курсы, статьи и документы в пользовательских папках. Один материал может находиться в разных папках. Владелец определяется через favorite_folders; права проверяет backend.'
+  folder_id uuid [not null, ref: > t_35.id]
+  material_id uuid [not null, ref: > n_materials.id]
+  created_at timestamptz [not null, default: `now()`]
+  indexes {
+    (folder_id, material_id) [pk]
+    material_id
+  }
+}
+
+Table mvp.email_preferences as t_30 {
+  Note: 'MVP. Согласие пользователя на маркетинговые письма, сведения об отзыве и ограничение частоты рассылки.'
+  user_id uuid [pk, ref: - t_24.id]
+  marketing_consent boolean [not null, default: false]
+  consent_updated_at timestamptz [not null]
+  consent_version text
+  unsubscribed_at timestamptz
+  max_emails_per_week integer [note: 'При отсутствии применять согласованную общую политику']
+}
+
+Table mvp.email_messages as t_31 {
+  Note: 'MVP. Журнал подготовки и отправки писем с типом, статусом и идентификатором у провайдера.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  list_id uuid [ref: > t_26.id]
+  kind text [not null]
+  status text [not null, note: 'Например queued, sent, failed; повторная отправка с учётом согласия']
+  provider_message_id text
+  created_at timestamptz [not null, default: `now()`]
+  sent_at timestamptz
+  indexes {
+    (user_id, sent_at)
+  }
+}
+
+Table mvp.discount_grants as t_32 {
+  Note: 'MVP. Выданные пользователю скидки независимо от причины: например заполнение анкеты или акция. Правила выдачи и использования определяет backend.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  reason text [not null, note: 'Причина выдачи, например onboarding или promotion; скидка не зависит от прохождения карты']
+  granted_at timestamptz [not null, default: `now()`]
+  expires_at timestamptz
+  redeemed_at timestamptz
+  discount_percent integer [note: 'Целый процент скидки от 1 до 100']
+  discount_amount_minor integer [note: 'Фиксированная скидка в копейках']
+  checks {
+    `(discount_percent IS NOT NULL AND discount_percent > 0 AND discount_percent <= 100 AND discount_amount_minor IS NULL) OR (discount_percent IS NULL AND discount_amount_minor IS NOT NULL AND discount_amount_minor > 0)` [name: 'discount_one_valid_amount']
+  }
+}
+
+Table mvp.subscription_access as t_33 {
+  Note: 'MVP. Периоды доступа пользователя к подписке. Backend создаёт доступ после приобретения; запись не подтверждает оплату.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  subscription_id uuid [not null, ref: > t_20."Id"]
+  valid_from timestamptz [not null]
+  valid_until timestamptz
+  revoked_at timestamptz
+  source text [not null, note: 'Например mvp_purchase; приобретение в MVP не является фактом оплаты']
+  source_reference text
+  indexes {
+    (user_id, subscription_id)
+  }
+}
+
+Table mvp.purchases as t_34 {
+  Note: 'MVP. Приобретение курса или тарифа подписки сразу после нажатия кнопки. Backend выдаёт доступ без оплаты; запись не подтверждает реальную денежную конверсию.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  course_id uuid [ref: > t_1."Id"]
+  subscription_tariff_id uuid [ref: > t_21."Id"]
+  amount_minor integer [check: `amount_minor >= 0`, note: 'Цена в копейках на момент приобретения, если известна; оплата не проводится']
+  created_at timestamptz [not null, default: `now()`]
+  checks {
+    `(course_id IS NOT NULL) <> (subscription_tariff_id IS NOT NULL)` [name: 'purchase_one_target']
+  }
+}
+
+Table mvp.materials as n_materials {
+  Note: 'MVP. Единый каталог материалов для рекомендаций, поиска и избранного. Служебная проекция исходных данных. Поддерживаются Courses, Articles и Documents. Для курса verified_course_id ссылается на Courses и совпадает с source_id. Для статей и документов существование исходной записи проверяет импортёр: полиморфный source_id не является внешним ключом. source_version меняется при изменении разрешённых фактов и инвалидирует кэш описаний. is_recommendable вычисляется по правилам конкретного типа, не по догадке LLM.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  source_table text [not null, check: `source_table IN ('Courses', 'Articles', 'Documents')`]
+  source_id uuid [not null, note: 'Id исходной записи в таблице source_table; проверку статей и документов выполняет импортёр']
+  kind text [not null, check: `kind IN ('course', 'article', 'document')`]
+  title text [not null]
+  public_description text [note: 'Только сведения, разрешённые для генерации; не содержимое платных уроков']
+  default_offer_text text [note: 'Подготовленное описание курса из 1–2 предложений для fallback. NULL допустим; не заменяет public_description и не меняет сохранённые снимки рекомендаций']
+  url text
+  duration_minutes integer [check: `duration_minutes > 0`]
+  access_type text [not null, default: 'unknown', check: `access_type IN ('free', 'paid', 'unknown')`]
+  is_recommendable boolean [not null, default: false]
+  source_version text [not null]
+  synced_at timestamptz [not null, default: `now()`]
+  verified_course_id uuid [ref: > t_1."Id", note: 'Только для курса; совпадает с source_id. Для статьи и документа пусто']
+  learning_role text [check: `learning_role IN ('intro', 'practice', 'advanced')`, note: 'Роль материала; заполняется до использования в рекомендациях']
+  difficulty_level text [check: `difficulty_level IN ('beginner', 'intermediate', 'advanced')`, note: 'Уровень сложности; заполняется до использования в рекомендациях']
+  metadata jsonb [note: 'Дополнительные подтверждённые сведения: prerequisites, outcomes, evidence; отсутствие означает неизвестность']
+  metadata_schema_version text [note: 'Версия структуры metadata; обязательна при заполненном metadata']
+  annotation_source text [check: `annotation_source IN ('import', 'manual', 'model')`]
+  annotation_version text
+  metadata_reviewed_at timestamptz
+  checks {
+    `(source_table = 'Courses' AND kind = 'course' AND verified_course_id IS NOT NULL AND source_id = verified_course_id) OR (source_table = 'Articles' AND kind = 'article' AND verified_course_id IS NULL) OR (source_table = 'Documents' AND kind = 'document' AND verified_course_id IS NULL)` [name: 'material_source_matches_kind']
+    `(metadata IS NULL OR metadata_schema_version IS NOT NULL) AND ((metadata IS NULL AND learning_role IS NULL AND difficulty_level IS NULL) OR (annotation_source IS NOT NULL AND annotation_version IS NOT NULL))` [name: 'material_annotation_provenance']
+  }
+  indexes {
+    (source_table, source_id) [unique]
+    verified_course_id
+    (kind, is_recommendable)
+  }
+}
+
+Table mvp.user_profiles as n_profiles {
+  Note: 'MVP. Текущие явные ответы пользователя. Коды стадий, отраслей и целей определяются версионированной конфигурацией приложения, отдельных таблиц таксономии нет. Backend проверяет коды по profile_config_version и владельца исходной анкеты. Пропуск вопроса не стирает старый ответ, явный сброс записывает NULL. Профиль и анкета обновляются транзакционно. Предположения по кликам не записываются как факты; вопросы о знаниях и отдельной трудности не задаются.'
+  user_id uuid [pk, ref: - t_24.id]
+  stage_code text
+  industry_code text
+  goal_code text
+  learning_mode text [check: `learning_mode IN ('quick', 'practical', 'trajectory')`]
+  profile_config_version text [not null, note: 'Версия словарей кодов; конфигурация хранится в репозитории и доступна для чтения старых профилей']
+  source_onboarding_response_id uuid [ref: > t_25.id]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table mvp.generation_runs as n_generation_runs {
+  Note: 'MVP. Журнал попыток генерации и проверок. Вход содержит минимальный профиль, разрешённые факты и версии материалов, без email и платных уроков. model_revision фиксирует веса и квантизацию; параметры — лимиты и настройки. input_hash вычисляется по каноническому полному запросу, включая версии модели и инструкции, и не уникален: повторные попытки допустимы. Срок хранения задаётся отдельно. Валидный JSON не гарантирует истинность текста.'
+  id uuid [pk, default: `gen_random_uuid()`]
+  model_name text [not null]
+  model_revision text [not null]
+  prompt_version text [not null]
+  generation_parameters jsonb [not null]
+  input_snapshot jsonb [not null]
+  input_hash text [not null]
+  output_json jsonb
+  status text [not null, default: 'pending', check: `status IN ('pending', 'succeeded', 'failed', 'fallback')`]
+  validation_errors jsonb
+  latency_ms integer [check: `latency_ms >= 0`]
+  created_at timestamptz [not null, default: `now()`]
+  checks {
+    `status NOT IN ('succeeded', 'fallback') OR output_json IS NOT NULL` [name: 'generation_result_required']
+  }
+  indexes {
+    (input_hash, created_at)
+    created_at
+  }
+}
+
+Note simplified_configuration {
+  '''
+Вместо taxonomy_terms, source_term_mappings, term_relations и material_terms используется конфигурация приложения:
+1. Разрешённые коды stage_code, industry_code и goal_code с подписями для анкеты.
+2. Проверенные соответствия целей исходным Topics и Tags.
+3. Очистка и сопоставление Industries: промометки не считаются отраслями.
+4. Связи материалов с темами, тегами и отраслями читаются из исходных ContentSettings*.
+Конфигурация имеет версию; её сохраняют в user_profiles.profile_config_version и recommendation_lists.ranking_config.
+Исторические версии доступны при разборе прежних профилей и выдач.
+material_metadata не создаётся: роль и сложность хранятся в materials с источником и версией разметки; дополнительные сведения — в metadata.
+В MVP materials содержит курсы, статьи и документы. Импортёр проверяет source_id для статей и документов и синхронизирует данные каталога с дампом. Для курсов verified_course_id связан с Courses.Id.
+  '''
+}
+Table public."CourseTypes" as t_36 {
+  Note: 'ДАМП. Типы образовательных курсов.'
+
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "IsDeleted" boolean [not null]
+}
+
+Table public."ArticleSubjects" as n_article_subjects {
+  Note: 'ДАМП. Тематические рубрики статей.'
+
+  "Id" uuid [pk]
+  "Title" citext [not null]
+  "Description" citext
+  "IsPublic" boolean [not null]
+  "IsDeleted" boolean [not null]
+  "Url" citext
+}
+
+Table public."DocumentBindings" as n_document_bindings {
+  Note: 'ДАМП. Связанные документы.'
+
+  "DocumentId" uuid [not null, ref: > n_documents."Id"]
+  "LinkedDocumentId" uuid [not null, ref: > n_documents."Id"]
+  "Order" integer
+
+  indexes {
+    ("DocumentId", "LinkedDocumentId") [pk]
+  }
+}
+
+// Справочная схема от пользователя: таблицей управляет команда backend, повторно не создавать.
+Table mvp.user_material_studies as n_studies {
+  Note: 'Текущая отметка изучения: наличие записи означает изучено, отсутствие — не изучено. Снятие отметки удаляет запись. Хранится отдельно от карты и не входит в её снимок.'
+  user_id uuid [not null, ref: > t_24.id]
+  material_id uuid [not null, ref: > n_materials.id]
+  marked_at timestamptz [not null, default: `now()`]
+  indexes {
+    (user_id, material_id) [pk]
+    material_id [name: 'ix_user_material_studies_material_id']
+  }
+}
+
+Table mvp.material_explanations as n_material_explanations {
+  Note: 'Персональный результат для пары пользователя и материала; lease ограничивает параллельные генерации.'
+  user_id uuid [not null, ref: > t_24.id]
+  material_id uuid [not null, ref: > n_materials.id]
+  explanation text
+  offer_text text
+  profile_hash text
+  context_hash text
+  source_version text
+  generated_at timestamptz
+  attempted_at timestamptz
+  lease_id uuid
+  lease_until timestamptz
+  indexes {
+    (user_id, material_id) [pk]
+  }
+}
+
+Table mvp.events as n_events {
+  Note: 'MVP. События взаимодействий пользователей с материалами.'
+
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > t_24.id]
+  material_id uuid [ref: > n_materials.id]
+  recommendation_item_id uuid [ref: > t_27.id]
+  session_id uuid
+  event_type text [not null]
+  occurred_at timestamptz [not null]
+  received_at timestamptz [not null, default: `now()`]
+  properties jsonb
+
+  indexes {
+    (user_id, occurred_at)
+    (material_id, occurred_at)
+    recommendation_item_id
+    (session_id, occurred_at)
+  }
+}
+
+
+Table mvp.user_material_studies as n_user_material_studies {
+  Note: 'MVP. Текущее множество материалов, которые пользователь явно отметил изученными. Одна запись на пользователя и материал, общая для всех его карт. Отсутствие записи означает is_studied = false. Снятие отметки удаляет запись; история переключений не хранится. Не подтверждает фактическое прохождение, не меняет доступ, ранжирование или скидки.'
+
+  user_id uuid [not null, ref: > t_24.id]
+  material_id uuid [not null, ref: > n_materials.id]
+  marked_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, material_id) [pk]
+    material_id
+  }
+}

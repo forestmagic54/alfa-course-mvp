@@ -1,0 +1,888 @@
+{
+  "checked_at": "2025-06-15T12:00:00Z",
+  "source": {
+    "Statuses": [
+      {
+        "Id": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "Title": "Опубликован (тест)"
+      }
+    ],
+    "Topics": [
+      {
+        "Id": "6541a087-3b32-5f66-87a5-c9b3b386ec53",
+        "Title": "Продажи"
+      },
+      {
+        "Id": "4fa1c057-6b5b-591e-ad75-d37a61736c66",
+        "Title": "Финансы"
+      }
+    ],
+    "Tags": [
+      {
+        "Id": "9adc5662-855a-54db-bd20-766b15174ab9",
+        "Title": "Продажи — тест"
+      },
+      {
+        "Id": "b5c04e6e-488e-5c17-836c-248805d89d4a",
+        "Title": "Финансы — тест"
+      }
+    ],
+    "Industries": [
+      {
+        "Id": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Title": "Тестовая отрасль"
+      }
+    ],
+    "DocumentTypes": [
+      {
+        "Id": "6d7bb911-458f-5c29-b004-45afb5550439",
+        "Title": "Шаблон",
+        "IsDeleted": false
+      }
+    ],
+    "Files": [
+      {
+        "Id": "7edf4f38-c9c1-5702-92a4-73794909e206",
+        "Title": "Продажи: practice",
+        "Url": "https://example.test/materials/sales-document/file",
+        "Size": 100,
+        "Extension": "pdf",
+        "IsDeleted": false
+      },
+      {
+        "Id": "40cf99d9-7f01-5a3d-b65e-3221c51bf7e1",
+        "Title": "Финансы: practice",
+        "Url": "https://example.test/materials/finance-document/file",
+        "Size": 100,
+        "Extension": "pdf",
+        "IsDeleted": false
+      }
+    ],
+    "Courses": [
+      {
+        "Id": "6d78dae7-6fc0-5cf7-bff8-689287d41a39",
+        "Title": "Продажи: advanced",
+        "Description": "Синтетический учебный материал.",
+        "Url": "https://example.test/materials/sales-course",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false,
+        "LessonQuantity": 0,
+        "IsClosed": false,
+        "Cost": null
+      },
+      {
+        "Id": "ac3b717e-923e-5e5d-829c-410a6392c5d7",
+        "Title": "Финансы: advanced",
+        "Description": "Синтетический учебный материал.",
+        "Url": "https://example.test/materials/finance-course",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false,
+        "LessonQuantity": 0,
+        "IsClosed": false,
+        "Cost": null
+      }
+    ],
+    "Articles": [
+      {
+        "Id": "cb759123-715f-5163-880f-02612423d663",
+        "Title": "Продажи: intro",
+        "Description": "Синтетический учебный материал.",
+        "Url": "https://example.test/materials/sales-article",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false,
+        "IsLesson": false,
+        "IsPublic": true,
+        "IsClosed": false,
+        "Published": "2025-01-01T00:00:00Z"
+      },
+      {
+        "Id": "8414c174-7b0e-5bf2-a3d8-712dc4a45dce",
+        "Title": "Финансы: intro",
+        "Description": "Синтетический учебный материал.",
+        "Url": "https://example.test/materials/finance-article",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false,
+        "IsLesson": false,
+        "IsPublic": true,
+        "IsClosed": false,
+        "Published": "2025-01-01T00:00:00Z"
+      },
+      {
+        "Id": "47c841fe-5381-5623-b864-492a0be2031b",
+        "Title": "hidden",
+        "Url": "https://example.test/materials/hidden",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsLesson": false,
+        "IsPublic": false,
+        "IsClosed": false,
+        "IsDeleted": false,
+        "Published": "2025-01-01T00:00:00Z"
+      },
+      {
+        "Id": "2fd5a487-2a9a-5535-9be2-656cd9dca592",
+        "Title": "unknown",
+        "Url": "https://example.test/materials/unknown",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsLesson": false,
+        "IsPublic": true,
+        "IsClosed": false,
+        "IsDeleted": false,
+        "Published": "2025-01-01T00:00:00Z"
+      }
+    ],
+    "Documents": [
+      {
+        "Id": "7fee518b-75a0-5bba-9459-650fc106900a",
+        "Title": "Продажи: practice",
+        "Description": "Синтетический учебный материал.",
+        "Url": "https://example.test/materials/sales-document",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false,
+        "TypeId": "6d7bb911-458f-5c29-b004-45afb5550439",
+        "FileId": "7edf4f38-c9c1-5702-92a4-73794909e206",
+        "Published": "2025-01-01T00:00:00Z"
+      },
+      {
+        "Id": "b4de33f3-9241-5b8e-902c-daa7062f682a",
+        "Title": "Финансы: practice",
+        "Description": "Синтетический учебный материал.",
+        "Url": "https://example.test/materials/finance-document",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false,
+        "TypeId": "6d7bb911-458f-5c29-b004-45afb5550439",
+        "FileId": "40cf99d9-7f01-5a3d-b65e-3221c51bf7e1",
+        "Published": "2025-01-01T00:00:00Z"
+      }
+    ],
+    "ContentSettings": [
+      {
+        "Id": "a718e040-277b-5fe0-a8f7-4cabbb10e9ff",
+        "EntityId": "cb759123-715f-5163-880f-02612423d663",
+        "EntityTypeId": "9c49e551-8a7b-576b-8fae-c5dc73b38a59",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false
+      },
+      {
+        "Id": "0e1af03d-b502-574e-8297-d5580eef6bb8",
+        "EntityId": "7fee518b-75a0-5bba-9459-650fc106900a",
+        "EntityTypeId": "c806d570-fa58-5f73-8ea4-ec9dcc6bae64",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false
+      },
+      {
+        "Id": "01e2a375-f4c3-5a29-9b40-15caf51fd2d9",
+        "EntityId": "6d78dae7-6fc0-5cf7-bff8-689287d41a39",
+        "EntityTypeId": "b1be58c4-3e05-5e4b-8f04-5d400cc538b2",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false
+      },
+      {
+        "Id": "fff2fdaf-ead7-5712-abfc-9e9980e1ec04",
+        "EntityId": "8414c174-7b0e-5bf2-a3d8-712dc4a45dce",
+        "EntityTypeId": "9c49e551-8a7b-576b-8fae-c5dc73b38a59",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false
+      },
+      {
+        "Id": "8d9516e9-1252-51ac-b079-c14f18bc94b1",
+        "EntityId": "b4de33f3-9241-5b8e-902c-daa7062f682a",
+        "EntityTypeId": "c806d570-fa58-5f73-8ea4-ec9dcc6bae64",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false
+      },
+      {
+        "Id": "a040669a-a8b5-5cf7-b46e-349c9e25b1eb",
+        "EntityId": "ac3b717e-923e-5e5d-829c-410a6392c5d7",
+        "EntityTypeId": "b1be58c4-3e05-5e4b-8f04-5d400cc538b2",
+        "StatusId": "4759e60c-22f2-5498-9506-cd01ffb9d02b",
+        "IsDeleted": false
+      }
+    ],
+    "ContentSettingsTopics": [
+      {
+        "ContentSettingsId": "a718e040-277b-5fe0-a8f7-4cabbb10e9ff",
+        "TopicId": "6541a087-3b32-5f66-87a5-c9b3b386ec53",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "0e1af03d-b502-574e-8297-d5580eef6bb8",
+        "TopicId": "6541a087-3b32-5f66-87a5-c9b3b386ec53",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "01e2a375-f4c3-5a29-9b40-15caf51fd2d9",
+        "TopicId": "6541a087-3b32-5f66-87a5-c9b3b386ec53",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "fff2fdaf-ead7-5712-abfc-9e9980e1ec04",
+        "TopicId": "4fa1c057-6b5b-591e-ad75-d37a61736c66",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "8d9516e9-1252-51ac-b079-c14f18bc94b1",
+        "TopicId": "4fa1c057-6b5b-591e-ad75-d37a61736c66",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "a040669a-a8b5-5cf7-b46e-349c9e25b1eb",
+        "TopicId": "4fa1c057-6b5b-591e-ad75-d37a61736c66",
+        "Order": 0
+      }
+    ],
+    "ContentSettingsTags": [
+      {
+        "ContentSettingsId": "a718e040-277b-5fe0-a8f7-4cabbb10e9ff",
+        "TagId": "9adc5662-855a-54db-bd20-766b15174ab9",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "0e1af03d-b502-574e-8297-d5580eef6bb8",
+        "TagId": "9adc5662-855a-54db-bd20-766b15174ab9",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "01e2a375-f4c3-5a29-9b40-15caf51fd2d9",
+        "TagId": "9adc5662-855a-54db-bd20-766b15174ab9",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "fff2fdaf-ead7-5712-abfc-9e9980e1ec04",
+        "TagId": "b5c04e6e-488e-5c17-836c-248805d89d4a",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "8d9516e9-1252-51ac-b079-c14f18bc94b1",
+        "TagId": "b5c04e6e-488e-5c17-836c-248805d89d4a",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "a040669a-a8b5-5cf7-b46e-349c9e25b1eb",
+        "TagId": "b5c04e6e-488e-5c17-836c-248805d89d4a",
+        "Order": 0
+      }
+    ],
+    "ContentSettingsIndustries": [
+      {
+        "ContentSettingsId": "a718e040-277b-5fe0-a8f7-4cabbb10e9ff",
+        "IndustryId": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "0e1af03d-b502-574e-8297-d5580eef6bb8",
+        "IndustryId": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "01e2a375-f4c3-5a29-9b40-15caf51fd2d9",
+        "IndustryId": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "fff2fdaf-ead7-5712-abfc-9e9980e1ec04",
+        "IndustryId": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "8d9516e9-1252-51ac-b079-c14f18bc94b1",
+        "IndustryId": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Order": 0
+      },
+      {
+        "ContentSettingsId": "a040669a-a8b5-5cf7-b46e-349c9e25b1eb",
+        "IndustryId": "93a93639-196c-5837-97f1-e8a96b637605",
+        "Order": 0
+      }
+    ],
+    "CourseTariffBindings": [
+      {
+        "Id": "587f26cb-03f5-539c-a7da-82b5e344c6b6",
+        "CourseId": "6d78dae7-6fc0-5cf7-bff8-689287d41a39",
+        "Title": "Разовая покупка (демо)",
+        "Cost": 199000
+      },
+      {
+        "Id": "95132bbc-a93b-5ba9-98b5-3d1684ebe856",
+        "CourseId": "ac3b717e-923e-5e5d-829c-410a6392c5d7",
+        "Title": "Разовая покупка (демо)",
+        "Cost": 299000
+      }
+    ],
+    "Subscription": [
+      {
+        "Id": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "Title": "Курс+ (демо)",
+        "IsDeleted": false
+      }
+    ],
+    "SubscriptionTariffs": [
+      {
+        "Id": "ad78212c-f237-5804-88a5-9689f190ab88",
+        "SubscriptionId": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "Title": "Демо на месяц",
+        "Cost": 99000,
+        "Recurrence": 1,
+        "RecurrenceValue": 1
+      }
+    ],
+    "CourseSubscriptions": [
+      {
+        "CourseId": "6d78dae7-6fc0-5cf7-bff8-689287d41a39",
+        "SubscriptionId": "847b9578-3023-5176-990d-8e4b3c3a755f"
+      }
+    ]
+  },
+  "mvp": {
+    "users": [
+      {
+        "id": "685e94f3-e562-5cb2-b3e3-d13adf50cf45",
+        "email": "cold@example.com",
+        "created_at": "2025-01-01T00:00:00Z"
+      },
+      {
+        "id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "email": "sales@example.com",
+        "created_at": "2025-01-01T00:00:00Z"
+      },
+      {
+        "id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "email": "finance@example.com",
+        "created_at": "2025-01-01T00:00:00Z"
+      },
+      {
+        "id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "email": "returned@example.com",
+        "created_at": "2025-01-01T00:00:00Z"
+      },
+      {
+        "id": "e9e64fdf-f0ba-5bf9-b4ff-4aa657fdca19",
+        "email": "expired@example.com",
+        "created_at": "2025-01-01T00:00:00Z"
+      },
+      {
+        "id": "2d8ba5d4-e0cd-5b68-a9f4-a6f00a449c68",
+        "email": "revoked@example.com",
+        "created_at": "2025-01-01T00:00:00Z"
+      }
+    ],
+    "onboarding_responses": [
+      {
+        "id": "698741e1-2eb8-500f-867d-ec03bcdb8455",
+        "user_id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "answers": {
+          "business_stage": "operating",
+          "current_task": "sales",
+          "learning_mode": "trajectory"
+        },
+        "form_type": "simple",
+        "questionnaire_version": "1",
+        "status": "completed",
+        "created_at": "2025-06-12T12:00:00Z",
+        "submitted_at": "2025-06-12T12:00:00Z",
+        "completed_at": "2025-06-12T12:00:00Z"
+      },
+      {
+        "id": "9875f433-a11a-5d6a-a614-e8e68e05d4a4",
+        "user_id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "answers": {
+          "business_stage": "operating",
+          "current_task": "finance",
+          "learning_mode": "trajectory"
+        },
+        "form_type": "simple",
+        "questionnaire_version": "1",
+        "status": "completed",
+        "created_at": "2025-06-10T12:00:00Z",
+        "submitted_at": "2025-06-10T12:00:00Z",
+        "completed_at": "2025-06-10T12:00:00Z"
+      }
+    ],
+    "user_profiles": [
+      {
+        "user_id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "stage_code": "operating",
+        "industry_code": null,
+        "goal_code": "sales",
+        "learning_mode": "trajectory",
+        "profile_config_version": "1",
+        "source_onboarding_response_id": "698741e1-2eb8-500f-867d-ec03bcdb8455",
+        "updated_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "user_id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "stage_code": "operating",
+        "industry_code": null,
+        "goal_code": "finance",
+        "learning_mode": "trajectory",
+        "profile_config_version": "1",
+        "source_onboarding_response_id": "9875f433-a11a-5d6a-a614-e8e68e05d4a4",
+        "updated_at": "2025-06-15T12:00:00Z"
+      }
+    ],
+    "materials": [
+      {
+        "id": "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+        "source_table": "Articles",
+        "source_id": "cb759123-715f-5163-880f-02612423d663",
+        "kind": "article",
+        "title": "Продажи: intro",
+        "public_description": "Синтетический учебный материал.",
+        "url": "https://example.test/materials/sales-article",
+        "duration_minutes": 30,
+        "access_type": "free",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": null,
+        "learning_role": "intro",
+        "difficulty_level": "beginner",
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1",
+        "metadata_reviewed_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "bb6719d7-1fd0-5246-990a-b4981b3cc343",
+        "source_table": "Documents",
+        "source_id": "7fee518b-75a0-5bba-9459-650fc106900a",
+        "kind": "document",
+        "title": "Продажи: practice",
+        "public_description": "Синтетический учебный материал.",
+        "url": "https://example.test/materials/sales-document",
+        "duration_minutes": 30,
+        "access_type": "free",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": null,
+        "learning_role": "practice",
+        "difficulty_level": "intermediate",
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1",
+        "metadata_reviewed_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "c1eca8b4-8d7b-5a0a-b8a7-5fe63fb23f84",
+        "source_table": "Courses",
+        "source_id": "6d78dae7-6fc0-5cf7-bff8-689287d41a39",
+        "kind": "course",
+        "title": "Продажи: advanced",
+        "public_description": "Синтетический учебный материал.",
+        "default_offer_text": "Демонстрационный курс по продажам для продвинутого уровня.",
+        "url": "https://example.test/materials/sales-course",
+        "duration_minutes": 30,
+        "access_type": "paid",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": "6d78dae7-6fc0-5cf7-bff8-689287d41a39",
+        "learning_role": "advanced",
+        "difficulty_level": "advanced",
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1",
+        "metadata_reviewed_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "10926149-a496-5c22-a447-214125b4d4f4",
+        "source_table": "Articles",
+        "source_id": "8414c174-7b0e-5bf2-a3d8-712dc4a45dce",
+        "kind": "article",
+        "title": "Финансы: intro",
+        "public_description": "Синтетический учебный материал.",
+        "url": "https://example.test/materials/finance-article",
+        "duration_minutes": 30,
+        "access_type": "free",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": null,
+        "learning_role": "intro",
+        "difficulty_level": "beginner",
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1",
+        "metadata_reviewed_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "550b99dd-27de-583f-a386-9df89dcf49e9",
+        "source_table": "Documents",
+        "source_id": "b4de33f3-9241-5b8e-902c-daa7062f682a",
+        "kind": "document",
+        "title": "Финансы: practice",
+        "public_description": "Синтетический учебный материал.",
+        "url": "https://example.test/materials/finance-document",
+        "duration_minutes": 30,
+        "access_type": "free",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": null,
+        "learning_role": "practice",
+        "difficulty_level": "intermediate",
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1",
+        "metadata_reviewed_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "1df15623-ecba-501d-ab29-630c1dcbfa04",
+        "source_table": "Courses",
+        "source_id": "ac3b717e-923e-5e5d-829c-410a6392c5d7",
+        "kind": "course",
+        "title": "Финансы: advanced",
+        "public_description": "Синтетический учебный материал.",
+        "default_offer_text": "Демонстрационный курс по финансам для продвинутого уровня.",
+        "url": "https://example.test/materials/finance-course",
+        "duration_minutes": 30,
+        "access_type": "paid",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": "ac3b717e-923e-5e5d-829c-410a6392c5d7",
+        "learning_role": "advanced",
+        "difficulty_level": "advanced",
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1",
+        "metadata_reviewed_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "dd1c27d2-f64b-5537-939c-4224106f2557",
+        "source_table": "Articles",
+        "source_id": "47c841fe-5381-5623-b864-492a0be2031b",
+        "kind": "article",
+        "title": "hidden",
+        "url": "https://example.test/materials/hidden",
+        "duration_minutes": null,
+        "access_type": "unknown",
+        "is_recommendable": false,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": null,
+        "learning_role": null,
+        "difficulty_level": null,
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1"
+      },
+      {
+        "id": "4f4f8458-a082-54ca-be9c-90c266f52090",
+        "source_table": "Articles",
+        "source_id": "2fd5a487-2a9a-5535-9be2-656cd9dca592",
+        "kind": "article",
+        "title": "unknown",
+        "url": "https://example.test/materials/unknown",
+        "duration_minutes": null,
+        "access_type": "unknown",
+        "is_recommendable": true,
+        "source_version": "demo-1",
+        "synced_at": "2025-06-15T12:00:00Z",
+        "verified_course_id": null,
+        "learning_role": null,
+        "difficulty_level": null,
+        "metadata": null,
+        "metadata_schema_version": null,
+        "annotation_source": "manual",
+        "annotation_version": "demo-1"
+      }
+    ],
+    "favorite_folders": [
+      {
+        "id": "09144451-5d9d-54a6-8eba-d04f92394d77",
+        "user_id": "685e94f3-e562-5cb2-b3e3-d13adf50cf45",
+        "name": "Избранное",
+        "is_default": true,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "6e3cbe99-88a3-5612-a0b5-970a7ef03791",
+        "user_id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "name": "Избранное",
+        "is_default": true,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "a384393a-1d4d-5dd2-b3ca-b4d26922e2d0",
+        "user_id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "name": "Избранное",
+        "is_default": true,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "ee7d7fb5-fa48-5d52-a7a1-0c8462e724f2",
+        "user_id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "name": "Избранное",
+        "is_default": true,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "641a8b6d-2cae-5fe4-921f-63b117625b4c",
+        "user_id": "e9e64fdf-f0ba-5bf9-b4ff-4aa657fdca19",
+        "name": "Избранное",
+        "is_default": true,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "02d34665-6694-515f-8326-6afb601ad205",
+        "user_id": "2d8ba5d4-e0cd-5b68-a9f4-a6f00a449c68",
+        "name": "Избранное",
+        "is_default": true,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "8cca56cf-1740-5cac-b740-6bea87537ebd",
+        "user_id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "name": "Для работы",
+        "is_default": false,
+        "created_at": "2025-06-15T12:00:00Z"
+      }
+    ],
+    "favorites": [
+      {
+        "folder_id": "6e3cbe99-88a3-5612-a0b5-970a7ef03791",
+        "material_id": "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "folder_id": "8cca56cf-1740-5cac-b740-6bea87537ebd",
+        "material_id": "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+        "created_at": "2025-06-15T12:00:00Z"
+      }
+    ],
+    "recommendation_lists": [
+      {
+        "id": "a41c5fa3-4aa1-5023-ab8c-f58d02f02c5d",
+        "user_id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "onboarding_response_id": null,
+        "list_type": "trajectory",
+        "mode": "personalized",
+        "recommendation_format": "deep",
+        "context_snapshot": {
+          "goal_code": "sales"
+        },
+        "ranking_version": "demo-1",
+        "ranking_config": {
+          "profile_config_version": "1"
+        },
+        "title": "Демо-маршрут по продажам",
+        "summary": "Учебная последовательность.",
+        "saved_at": "2025-06-15T12:00:00Z",
+        "generation_run_id": null,
+        "created_at": "2025-06-15T12:00:00Z"
+      },
+      {
+        "id": "c8fa4714-12c3-4188-8ca6-7bff73de7806",
+        "user_id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "onboarding_response_id": null,
+        "list_type": "trajectory",
+        "mode": "personalized",
+        "recommendation_format": "deep",
+        "context_snapshot": {
+          "goal_code": "sales"
+        },
+        "ranking_version": "demo-1",
+        "ranking_config": {
+          "profile_config_version": "1"
+        },
+        "title": "Второй демо-маршрут по продажам",
+        "summary": "Учебная последовательность.",
+        "saved_at": null,
+        "generation_run_id": null,
+        "created_at": "2025-06-15T12:00:00Z"
+      }
+    ],
+    "recommendation_items": [
+      {
+        "id": "f06e6647-63d0-50f5-a56c-8271391a8f56",
+        "list_id": "a41c5fa3-4aa1-5023-ab8c-f58d02f02c5d",
+        "material_id": "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+        "position": 1,
+        "explanation": "Тестовое объяснение шага.",
+        "offer_text": null,
+        "selection_kind": "relevance",
+        "score": 1.0,
+        "step_role": "intro",
+        "transition_text": null,
+        "generation_run_id": null
+      },
+      {
+        "id": "239aa142-38e5-56ed-9afa-95e8a24dfe39",
+        "list_id": "a41c5fa3-4aa1-5023-ab8c-f58d02f02c5d",
+        "material_id": "bb6719d7-1fd0-5246-990a-b4981b3cc343",
+        "position": 2,
+        "explanation": "Тестовое объяснение шага.",
+        "offer_text": null,
+        "selection_kind": "relevance",
+        "score": 1.0,
+        "step_role": "practice",
+        "transition_text": "Следующий учебный шаг.",
+        "generation_run_id": null
+      },
+      {
+        "id": "f40de5d8-f999-5c9e-b46d-a1157c14cfa8",
+        "list_id": "a41c5fa3-4aa1-5023-ab8c-f58d02f02c5d",
+        "material_id": "c1eca8b4-8d7b-5a0a-b8a7-5fe63fb23f84",
+        "position": 3,
+        "explanation": "Тестовое объяснение шага.",
+        "offer_text": null,
+        "selection_kind": "relevance",
+        "score": 1.0,
+        "step_role": "advanced",
+        "transition_text": "Следующий учебный шаг.",
+        "generation_run_id": null
+      },
+      {
+        "id": "060d755e-f806-4c11-bff6-5bdf80f7d1ad",
+        "list_id": "c8fa4714-12c3-4188-8ca6-7bff73de7806",
+        "material_id": "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+        "position": 1,
+        "explanation": "Тестовое объяснение шага.",
+        "offer_text": null,
+        "selection_kind": "relevance",
+        "score": 1.0,
+        "step_role": "intro",
+        "transition_text": null,
+        "generation_run_id": null
+      }
+    ],
+    "purchases": [
+      {
+        "id": "49d789af-0bfe-5105-ad6d-9d7c24894267",
+        "user_id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "course_id": "ac3b717e-923e-5e5d-829c-410a6392c5d7",
+        "subscription_tariff_id": null,
+        "amount_minor": 269100,
+        "created_at": "2025-06-11T12:00:00Z"
+      }
+    ],
+    "subscription_access": [
+      {
+        "id": "96a89c3a-ac3a-55b1-8214-d1d4fd882f14",
+        "user_id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "subscription_id": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "valid_from": "2025-06-01T12:00:00Z",
+        "valid_until": "2025-07-01T12:00:00Z",
+        "revoked_at": null,
+        "source": "demo_fixture",
+        "source_reference": null
+      },
+      {
+        "id": "4797f841-8530-5946-b958-ed12190995a1",
+        "user_id": "e9e64fdf-f0ba-5bf9-b4ff-4aa657fdca19",
+        "subscription_id": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "valid_from": "2025-04-01T12:00:00Z",
+        "valid_until": "2025-05-01T12:00:00Z",
+        "revoked_at": null,
+        "source": "demo_fixture",
+        "source_reference": null
+      },
+      {
+        "id": "fa5f7ce4-24f0-56c9-aa32-99e208fb90d0",
+        "user_id": "2d8ba5d4-e0cd-5b68-a9f4-a6f00a449c68",
+        "subscription_id": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "valid_from": "2025-06-01T12:00:00Z",
+        "valid_until": "2025-07-01T12:00:00Z",
+        "revoked_at": "2025-06-10T12:00:00Z",
+        "source": "demo_fixture",
+        "source_reference": null
+      }
+    ],
+    "discount_grants": [
+      {
+        "id": "6b2bf137-38b9-5d64-b1f7-8e272651c3f0",
+        "user_id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "reason": "onboarding",
+        "granted_at": "2025-06-12T12:00:00Z",
+        "expires_at": "2025-06-19T12:00:00Z",
+        "redeemed_at": null,
+        "discount_percent": 10,
+        "discount_amount_minor": null
+      },
+      {
+        "id": "ef5d1e01-66bc-5ee6-bbd9-b1d76c67dce0",
+        "user_id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "reason": "onboarding",
+        "granted_at": "2025-06-10T12:00:00Z",
+        "expires_at": "2025-06-17T12:00:00Z",
+        "redeemed_at": "2025-06-11T12:00:00Z",
+        "discount_percent": 10,
+        "discount_amount_minor": null
+      },
+      {
+        "id": "a7cb15eb-a6b8-57b1-a1c1-555e540187da",
+        "user_id": "e9e64fdf-f0ba-5bf9-b4ff-4aa657fdca19",
+        "reason": "promotion",
+        "granted_at": "2025-06-01T12:00:00Z",
+        "expires_at": "2025-06-08T12:00:00Z",
+        "redeemed_at": null,
+        "discount_percent": 10,
+        "discount_amount_minor": null
+      }
+    ],
+    "email_preferences": [
+      {
+        "user_id": "685e94f3-e562-5cb2-b3e3-d13adf50cf45",
+        "marketing_consent": false,
+        "consent_updated_at": "2025-06-15T12:00:00Z",
+        "consent_version": null,
+        "unsubscribed_at": null,
+        "max_emails_per_week": null
+      },
+      {
+        "user_id": "1547a449-6df2-5091-91e0-f4743fb8fd81",
+        "marketing_consent": true,
+        "consent_updated_at": "2025-06-15T12:00:00Z",
+        "consent_version": "demo-1",
+        "unsubscribed_at": null,
+        "max_emails_per_week": null
+      },
+      {
+        "user_id": "a394b810-7e00-5f59-b0a0-07a84eca7c79",
+        "marketing_consent": false,
+        "consent_updated_at": "2025-06-15T12:00:00Z",
+        "consent_version": "demo-1",
+        "unsubscribed_at": "2025-06-15T12:00:00Z",
+        "max_emails_per_week": null
+      },
+      {
+        "user_id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "marketing_consent": false,
+        "consent_updated_at": "2025-06-15T12:00:00Z",
+        "consent_version": null,
+        "unsubscribed_at": null,
+        "max_emails_per_week": null
+      },
+      {
+        "user_id": "e9e64fdf-f0ba-5bf9-b4ff-4aa657fdca19",
+        "marketing_consent": false,
+        "consent_updated_at": "2025-06-15T12:00:00Z",
+        "consent_version": null,
+        "unsubscribed_at": null,
+        "max_emails_per_week": null
+      },
+      {
+        "user_id": "2d8ba5d4-e0cd-5b68-a9f4-a6f00a449c68",
+        "marketing_consent": false,
+        "consent_updated_at": "2025-06-15T12:00:00Z",
+        "consent_version": null,
+        "unsubscribed_at": null,
+        "max_emails_per_week": null
+      }
+    ],
+    "user_material_studies": [
+      {
+        "user_id": "ffd0593f-069d-50e3-8282-46595177a2a3",
+        "material_id": "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e"
+      }
+    ]
+  }
+}

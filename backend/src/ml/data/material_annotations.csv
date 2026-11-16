@@ -1,0 +1,17 @@
+source_table,source_id,learning_role,difficulty_level,annotation_source,annotation_version
+Articles,293e0962-7aa1-491e-ab4b-ed9e787428c2,intro,beginner,model,recsys-v55-route-model-v1
+Courses,b9045d6e-07ad-407f-a305-472e82fef797,practice,beginner,model,recsys-v55-route-model-v1
+Courses,3d17b03e-0e69-44cf-aa04-110e92437016,advanced,beginner,model,recsys-v55-route-model-v2
+Articles,9a1e6145-ca33-4d18-bf8a-0be4d8bd028d,intro,beginner,model,recsys-v55-route-model-v1
+Courses,d0aa4598-3da2-478b-bbf8-bda81b231b58,practice,beginner,model,recsys-v55-route-model-v1
+Courses,28e2a868-0b58-4fd6-af4d-7aa268ae91b4,advanced,intermediate,model,recsys-v55-route-model-v1
+Articles,7dc31c2f-15dc-471a-a6aa-312d23090597,intro,beginner,model,recsys-v55-route-model-v1
+Courses,eb371f34-34ea-4cb3-991a-cbbea147eda2,practice,beginner,model,recsys-v55-route-model-v1
+Courses,8be9c4dc-d301-4af3-9548-0a091b8cf441,advanced,intermediate,model,recsys-v55-route-model-v1
+Articles,d3b549ed-3433-4975-b964-d1785f79fbaf,intro,beginner,model,recsys-v55-route-model-v1
+Courses,a8184af0-7007-4bc3-98c1-1ff55c949a97,practice,beginner,model,recsys-v55-route-model-v1
+Articles,9e0e0f59-3edd-47bc-bdac-7fa9a20149f8,intro,beginner,model,recsys-v55-route-model-v1
+Courses,a26fad9d-4380-4ba2-a8b9-27e495eeb721,practice,beginner,model,recsys-v55-route-model-v2
+Courses,a25c8282-94c7-458e-abf6-9fbd7b996ef7,advanced,beginner,model,recsys-v55-route-model-v1
+Articles,ce9e4b30-5716-4188-a1de-dffd3a24be87,intro,beginner,model,recsys-v55-route-model-v1
+Courses,b3b52649-3f00-4c66-9d0f-8def7c0391b5,advanced,intermediate,model,recsys-v55-route-model-v1

@@ -1,0 +1,11 @@
+.env*
+*.env
+.venv
+.git
+__pycache__
+.pytest_cache
+/docs/.todo/
+.idea
+.agents
+dist
+.DS_Store

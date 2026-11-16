@@ -1,0 +1,4 @@
+services:
+  backend:
+    image: ${DOCKER_IMAGE:?Set DOCKER_IMAGE to your Docker Hub image name and tag}
+    build: .

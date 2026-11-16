@@ -1,0 +1,1595 @@
+openapi: 3.1.1
+info:
+  title: Альфа-Курс — API MVP
+  version: 0.3.0
+  description: |
+    Контракт хакатонного MVP v4.1. Каталог, поиск и рекомендации доступны гостям.
+    Каталог поддерживает курсы, статьи и документы. Для сохранения, скидок и
+    демонстрационного оформления доступа требуется аккаунт.
+    URL действий указывают на доступные в демо материалы или внешние ресурсы.
+    Для внешних ресурсов действуют условия доступа источника.
+    Цены демонстрационные, денежные операции отсутствуют. Суммы передаются целыми копейками в RUB.
+    Все даты и моменты времени передаются в формате RFC 3339.
+    Персональные ответы, включая каталог с токеном, не кэшируются общими кэшами.
+    UUID в примерах иллюстративные.
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Аккаунт
+  - name: Каталог
+  - name: Анкета
+  - name: Рекомендации
+  - name: Приобретения
+  - name: Избранное
+  - name: Карты цели
+  - name: Рассылка
+
+paths:
+  /auth/register:
+    post:
+      tags: [Аккаунт]
+      operationId: register
+      summary: Зарегистрироваться и получить токен
+      description: |
+        Создаёт локальный аккаунт в mvp.users. Email приводится к нижнему регистру и проверяется
+        на уникальность. Пароль хранится в виде хеша. Аккаунт и папка избранного
+        по умолчанию создаются атомарно.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Registration' }
+      responses:
+        '201': { $ref: '#/components/responses/AuthSession' }
+        '409':
+          description: Email уже зарегистрирован. Код email_taken.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+              example: { code: email_taken, message: Этот email уже зарегистрирован }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /auth/login:
+    post:
+      tags: [Аккаунт]
+      operationId: login
+      summary: Войти по email и паролю
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Credentials' }
+      responses:
+        '200': { $ref: '#/components/responses/AuthSession' }
+        '401':
+          description: Неверный email или пароль. Код invalid_credentials.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+              example: { code: invalid_credentials, message: Проверьте email и пароль }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me:
+    get:
+      tags: [Аккаунт]
+      operationId: getMe
+      summary: Получить текущий аккаунт
+      responses:
+        '200':
+          description: Данные пользователя из токена и статус анкеты.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Account' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /materials:
+    get:
+      tags: [Каталог]
+      operationId: listMaterials
+      summary: Просмотреть или отфильтровать каталог материалов
+      description: |
+        Каталог доступен гостям. Все переданные фильтры применяются вместе.
+        В выдачу входят опубликованные материалы, доступные для показа по правилам исходного типа.
+        Для диапазона цены min_price_minor не должен превышать max_price_minor.
+        Неизвестное значение не проходит фильтр по цене, длительности или навыку.
+        Бесплатный материал имеет цену 0 для фильтрации. Границы цены проверяются
+        по базовой цене разовой покупки, до персональной скидки, в копейках.
+        Без строки поиска сортировка по убыванию популярности, затем по названию и ID;
+        материалы без рейтинга идут после оценённых. При поиске — по совпадению, названию и ID.
+      security:
+        - bearerAuth: []
+        - {}
+      parameters:
+        - name: q
+          in: query
+          description: Поиск по названию без учёта регистра. Пробелы по краям удаляются.
+          schema: { type: string, minLength: 1, maxLength: 200, pattern: '\S' }
+        - name: kind
+          in: query
+          schema: { $ref: '#/components/schemas/MaterialKind' }
+        - name: topic_id
+          in: query
+          schema: { $ref: '#/components/schemas/Uuid' }
+        - name: industry_id
+          in: query
+          schema: { $ref: '#/components/schemas/Uuid' }
+        - name: skill_id
+          in: query
+          schema: { $ref: '#/components/schemas/Uuid' }
+        - name: access_type
+          in: query
+          description: free — бесплатный материал, paid — разовая покупка, subscription — входит в «Курс+». Курс может соответствовать нескольким способам.
+          schema: { type: string, enum: [free, paid, subscription] }
+        - name: min_price_minor
+          in: query
+          schema: { type: integer, minimum: 0 }
+        - name: max_price_minor
+          in: query
+          schema: { type: integer, minimum: 0 }
+        - name: max_duration_minutes
+          in: query
+          schema: { type: integer, minimum: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - name: offset
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        '200':
+          description: Страница каталога. При отсутствии совпадений items пуст и total равен 0.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, total]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/MaterialCard' }
+                  total: { type: integer, minimum: 0 }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /materials/filters:
+    get:
+      tags: [Каталог]
+      operationId: getMaterialFilters
+      summary: Получить темы, сферы и навыки для фильтров
+      security: []
+      responses:
+        '200':
+          description: |
+            Справочники с ID и названием. Навыки берутся из подтверждённой разметки,
+            при её отсутствии список пуст. Сферы каталога могут отличаться от вариантов анкеты.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [topics, industries, skills]
+                properties:
+                  topics:
+                    type: array
+                    items: { $ref: '#/components/schemas/NamedItem' }
+                  industries:
+                    type: array
+                    items: { $ref: '#/components/schemas/NamedItem' }
+                  skills:
+                    type: array
+                    items: { $ref: '#/components/schemas/NamedItem' }
+
+  /materials/{material_id}:
+    parameters:
+      - $ref: '#/components/parameters/MaterialId'
+    get:
+      tags: [Каталог]
+      operationId: getMaterial
+      summary: Открыть страницу материала
+      description: |
+        Возвращает карточку и 2–3 тематически связанных материала при наличии. При переходе
+        из карты фронтенд показывает следующий элемент из уже загруженного списка steps.
+      security:
+        - bearerAuth: []
+        - {}
+      responses:
+        '200':
+          description: Страница материала с доступным действием.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MaterialDetail' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /materials/{material_id}/explanation:
+    parameters:
+      - $ref: '#/components/parameters/MaterialId'
+    post:
+      tags: [Каталог]
+      operationId: generateMaterialExplanation
+      summary: Получить или обновить персональный текст материала
+      description: |
+        Возвращает краткое объяснение пользы одного видимого курса, статьи или документа.
+        material_id — ID из mvp.materials. Материал не обязан входить в подборку/карту,
+        иметь is_recommendable=true, роль, уровень сложности или доступное действие.
+        RecSys не вызывается и состав рекомендаций не меняется.
+        Только для авторизованного аккаунта. Последний успешный текст повторно используется
+        в течение 7 дней; изменение значимых предпочтений разрешает обновление раньше.
+        Для аккаунта используются сохранённые предпочтения; переданная onboarding
+        временно применяется по общим правилам анкеты и не сохраняется.
+        Без предпочтений текст нейтральный, только по подтверждённым публичным фактам.
+        Генератор не задаёт цены, скидки, доступ, URL или гарантированный результат.
+        offer_text допускается только у курса; у статьи/документа всегда null.
+        При ошибке, таймауте или невалидном результате возвращается подходящий предыдущий
+        текст, базовый текст или безопасный шаблон с 200. Запрос не создаёт
+        подборку, карту, анкету, отметку, событие или запись подготовки письма.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MaterialExplanationInput' }
+            example: {}
+      responses:
+        '200':
+          description: Объяснение в 1–2 предложения и необязательный продающий текст курса. Ответ не кэшируется.
+          headers:
+            Cache-Control:
+              schema: { type: string, const: no-store }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MaterialExplanation' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404':
+          description: Материал скрыт/отсутствует (not_found) либо выбранная форма ещё не настроена (questionnaire_not_available).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '409': { $ref: '#/components/responses/QuestionnaireChanged' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /onboarding/questionnaire:
+    get:
+      tags: [Анкета]
+      operationId: getQuestionnaire
+      summary: Получить актуальную версию анкеты
+      description: |
+        Фронтенд строит форму по списку вопросов. Для полного заполнения обязательны
+        стадия бизнеса и текущая задача. Анкету можно отправить частично или пропустить.
+        Опции, тексты и дополнительные вопросы задаются версией выбранной формы.
+      security: []
+      parameters:
+        - name: form_type
+          in: query
+          schema:
+            $ref: '#/components/schemas/FormType'
+            default: simple
+      responses:
+        '200':
+          description: Определение актуальной анкеты.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Questionnaire' }
+              example:
+                form_type: simple
+                questionnaire_version: '1'
+                questions:
+                  - key: business_stage
+                    label: На каком этапе ваш бизнес?
+                    type: single_select
+                    required: true
+                    options:
+                      - { value: starting, label: Запускаю бизнес }
+                      - { value: operating, label: Бизнес уже работает }
+                  - key: current_task
+                    label: Какую задачу вы хотите решить?
+                    type: single_select
+                    required: true
+                    options:
+                      - { value: sales, label: Увеличить продажи }
+                      - { value: marketing, label: Настроить маркетинг }
+                      - { value: finance, label: Разобраться с финансами и учётом }
+                      - { value: management, label: Улучшить управление }
+                      - { value: other, label: Другая задача }
+                  - key: learning_mode
+                    label: Как вам удобнее учиться?
+                    type: single_select
+                    required: false
+                    options:
+                      - { value: quick, label: Быстро разобраться }
+                      - { value: practical, label: Попрактиковаться }
+                      - { value: trajectory, label: Учиться последовательно }
+        '404': { $ref: '#/components/responses/QuestionnaireUnavailable' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/onboarding:
+    get:
+      tags: [Анкета]
+      operationId: getOnboarding
+      summary: Получить последние сохранённые ответы
+      description: Возвращает ответы в исходной версии. Определение текущей формы доступно отдельно.
+      responses:
+        '200':
+          description: Последняя отправка анкеты с её статусом или null.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/OnboardingResponse'
+                  - type: 'null'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    put:
+      tags: [Анкета]
+      operationId: saveOnboarding
+      summary: Заполнить или обновить анкету
+      description: |
+        Бэкенд проверяет ответы по текущей версии анкеты. completed требует ответов на обязательные
+        вопросы, partial допускает неполные ответы, skipped передаётся с пустым объектом answers.
+        Пропущенный ключ сохраняет прежнее значение в mvp.user_profiles. Явный null очищает значение.
+        Стадия, отрасль и цель сопоставляются с кодами версионированной конфигурации.
+        Отправка сохраняется в mvp.onboarding_responses вместе с обновлением профиля.
+        Первое полное заполнение даёт право на скидку onboarding по правилам GET /me/discounts.
+        Анкета, профиль и выдача скидки фиксируются вместе. После регистрации гость может
+        отправить сохранённые фронтендом ответы и запросить персональный подбор повторно.
+        Идентичная повторная отправка той же формы возвращает последнюю запись без повторной скидки.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OnboardingInput' }
+            example:
+              form_type: simple
+              questionnaire_version: '1'
+              status: completed
+              answers:
+                business_stage: operating
+                current_task: sales
+      responses:
+        '200':
+          description: Сохранённые ответы.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OnboardingResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/QuestionnaireUnavailable' }
+        '409':
+          description: Анкета обновилась. Получите новую форму и отправьте ответы её версии. Код questionnaire_version_mismatch.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/preferences:
+    get:
+      tags: [Анкета]
+      operationId: getPreferences
+      summary: Получить текущие параметры профиля
+      responses:
+        '200':
+          description: Явные предпочтения с учётом всех отправок анкеты или null.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/Preferences'
+                  - type: 'null'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /recommendations:
+    get:
+      tags: [Рекомендации]
+      operationId: getRecommendations
+      summary: Получить витрину рекомендаций
+      description: |
+        По умолчанию для аккаунта с профилем используется персональный подбор, иначе популярное.
+        Явный mode=popular показывает общую витрину с детерминированным порядком при нехватке
+        данных о популярности. В этом режиме explanation и offer_text равны null.
+        Запрос mode=personalized без ответов также возвращает mode=popular.
+        Персональный подбор использует до 6 подходящих материалов при наличии, формат quick
+        или medium, подтверждённые факты и шаблон объяснения при сбое LLM.
+        ID персональной подборки аккаунта можно передать в операцию сохранения.
+      security:
+        - bearerAuth: []
+        - {}
+      parameters:
+        - name: mode
+          in: query
+          schema: { type: string, enum: [popular, personalized] }
+        - name: format
+          in: query
+          description: Для персонального подбора. Предпочтение practical соответствует medium, в остальных случаях по умолчанию quick.
+          schema: { $ref: '#/components/schemas/FeedFormat' }
+      responses:
+        '200': { $ref: '#/components/responses/RecommendationList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+        '503': { $ref: '#/components/responses/RankingUnavailable' }
+    post:
+      tags: [Рекомендации]
+      operationId: generateRecommendations
+      summary: Сформировать персональный подбор или пересчитать витрину
+      description: |
+        Гость передаёт текущую анкету в onboarding. Ответы и результат существуют только
+        в рамках запроса, id результата равен null. Аккаунт может использовать сохранённый
+        профиль. С переданной анкетой используется временный результат и профиль не меняется.
+        Для сохранения гостевого подбора пользователь регистрируется, отправляет ответы
+        в PUT /me/onboarding и повторно запрашивает витрину со своим токеном.
+        При отсутствии явных ответов возвращается популярная витрина.
+        При создании подборки возвращается не более 5 материалов.
+      security:
+        - bearerAuth: []
+        - {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/FeedInput' }
+      responses:
+        '200': { $ref: '#/components/responses/RecommendationList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { $ref: '#/components/responses/QuestionnaireChanged' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+        '503': { $ref: '#/components/responses/RankingUnavailable' }
+
+  /me/recommendations:
+    get:
+      tags: [Рекомендации]
+      operationId: listSavedRecommendations
+      summary: Получить сохранённые подборки
+      responses:
+        '200':
+          description: Сохранённые персональные витрины, последние сохранённые сначала.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/RecommendationList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/recommendations/{list_id}/saved:
+    parameters:
+      - $ref: '#/components/parameters/ListId'
+    put:
+      tags: [Рекомендации]
+      operationId: saveRecommendations
+      summary: Сохранить персональную подборку
+      description: Повторный запрос сохраняет исходное время saved_at. Принимается только ID своей персональной витрины.
+      responses:
+        '200': { $ref: '#/components/responses/RecommendationList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /roadmaps:
+    post:
+      tags: [Карты цели]
+      operationId: generateRoadmap
+      summary: Сформировать карту достижения цели
+      description: |
+        Создаёт упорядоченную карту в режиме deep. Для аккаунта используется текущий профиль,
+        для временной карты — onboarding из тела запроса. Требуется цель из одного из этих источников.
+        Временная карта имеет id null. Новая карта аккаунта получает ID и saved_at null.
+        Чтобы сохранить гостевую карту, отправьте ответы в PUT /me/onboarding после регистрации,
+        сформируйте карту из профиля и сохраните её по полученному ID.
+        Повторная генерация создаёт новую карту. RecSys подбирает материалы по теме, роли
+        и сложности, обычно вводный, практический и углублённый. При нехватке кандидатов
+        допускается более короткая карта или тематические альтернативы. При отсутствии
+        подходящих материалов возвращается 422 с кодом roadmap_unavailable.
+        Действие на шаге зависит от доступа к материалу. При сбое LLM используются шаблоны.
+        is_studied каждого шага вычисляется по текущему аккаунту, в том числе для временной
+        карты с токеном; у гостя всегда false. Пересоздание карты не сбрасывает отметки.
+      security:
+        - bearerAuth: []
+        - {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                onboarding: { $ref: '#/components/schemas/OnboardingInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Roadmap' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { $ref: '#/components/responses/QuestionnaireChanged' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+        '503': { $ref: '#/components/responses/RankingUnavailable' }
+
+  /me/roadmaps:
+    get:
+      tags: [Карты цели]
+      operationId: listSavedRoadmaps
+      summary: Получить сохранённые карты
+      responses:
+        '200':
+          description: Карты аккаунта, последние сохранённые сначала.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Roadmap' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/roadmaps/{list_id}:
+    parameters:
+      - $ref: '#/components/parameters/ListId'
+    get:
+      tags: [Карты цели]
+      operationId: getRoadmap
+      summary: Получить свою карту
+      responses:
+        '200': { $ref: '#/components/responses/Roadmap' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/roadmaps/{list_id}/saved:
+    parameters:
+      - $ref: '#/components/parameters/ListId'
+    put:
+      tags: [Карты цели]
+      operationId: saveRoadmap
+      summary: Сохранить свою карту
+      description: Повторный запрос сохраняет исходное время saved_at.
+      responses:
+        '200': { $ref: '#/components/responses/Roadmap' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/materials/{material_id}/study-state:
+    parameters:
+      - $ref: '#/components/parameters/MaterialId'
+    put:
+      tags: [Карты цели]
+      operationId: setMaterialStudyState
+      summary: Установить или снять отметку «изучено»
+      description: |
+        Пользователь определяется по токену. Состояние относится к паре аккаунт + материал,
+        а не к конкретной карте. is_studied=true создаёт отметку, false удаляет её.
+        Повторы одного состояния идемпотентны и возвращают 204 без дублей.
+        Для установки проверяется существование и видимость материала в каталоге.
+        Снять свою отметку можно и у скрытого материала; неизвестный материал даёт 404.
+        ID материала берётся из mvp.materials. Запись действует для всех трёх типов,
+        во всех существующих и новых картах пользователя, включая временную карту с токеном.
+        При чтении карты steps[].is_studied вычисляется по текущему состоянию аккаунта.
+        Отметка не подтверждает внешнее прохождение, не выдаёт доступ или скидку и
+        не меняет ранжирование. Гость должен войти; пользовательских событий не создаётся.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MaterialStudyStateInput' }
+            example: { is_studied: true }
+      responses:
+        '204':
+          description: Состояние установлено или уже соответствовало запросу. Тело отсутствует.
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/discounts:
+    get:
+      tags: [Приобретения]
+      operationId: listDiscounts
+      summary: Получить выданные пользователю скидки
+      description: |
+        Причина выдачи хранится в mvp.discount_grants.reason. Условия выдачи и применимости
+        задаются бэкендом для каждой причины. Примеры причин — onboarding, course_completion и promotion.
+        Скидка onboarding выдаётся один раз после первой полностью заполненной анкеты, если платный курс
+        ещё не приобретался. Она действует на приобретение подписки или первого платного курса,
+        пока платный курс не был приобретён. Размер и срок
+        задаются настройками на момент выдачи. Истечение срока не даёт права на повторную выдачу onboarding.
+      responses:
+        '200':
+          description: Выданные скидки, новые сначала. Если скидок нет, возвращается пустой массив.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DiscountGrant' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/purchases:
+    post:
+      tags: [Приобретения]
+      operationId: acquire
+      summary: Приобрести демо-доступ к курсу или подписке
+      description: |
+        Бэкенд проверяет доступность цели и пересчитывает цену по тем же правилам, что и в карточке.
+        Из действующих скидок, применимых к цели, автоматически выбирается одна с максимальной
+        экономией. При равной экономии применяется выданная раньше, при одинаковом времени — с меньшим ID.
+        Запись приобретения, выдача доступа и погашение скидки выполняются
+        атомарно. Параллельные запросы одного пользователя проверяют право на скидку и доступ
+        последовательно. Приобретённый курс становится доступен в GET /materials/{material_id}.
+        Для подписки создаётся период доступа, который виден в GET /me/subscriptions.
+        Запрос выполняется без оплаты.
+
+        Клиент генерирует новый request_id для каждого намеренного приобретения и повторяет тот же
+        ID при сетевом сбое. Успешный повтор с тем же ID и целью возвращает исходную запись с 200,
+        даже если цена или доступность с тех пор поменялись. ID с другой целью даёт 409.
+        Новый запрос на уже доступный курс или активную подписку даёт 409.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PurchaseInput' }
+            examples:
+              course:
+                summary: Разовое приобретение курса из рекомендаций
+                value:
+                  request_id: '6552f241-0ea9-4782-8327-d71ac2407cd9'
+                  kind: course
+                  course_id: '2885d15d-b693-4bd6-a87a-0ad58961a052'
+              subscription:
+                summary: Подключение тарифа «Курс+»
+                value:
+                  request_id: '02683ffa-3b61-45eb-9a78-11ed24790167'
+                  kind: subscription
+                  subscription_tariff_id: '28d95391-9bfe-433a-952a-43135b52ce9c'
+      responses:
+        '201': { $ref: '#/components/responses/Purchase' }
+        '200': { $ref: '#/components/responses/Purchase' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409':
+          description: >
+            Конфликт. Возможные коды — request_id_conflict, course_access_exists,
+            subscription_already_active или offer_unavailable.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+    get:
+      tags: [Приобретения]
+      operationId: listPurchases
+      summary: Получить историю демо-приобретений
+      responses:
+        '200':
+          description: Приобретения текущего аккаунта, новые сначала.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Purchase' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/subscriptions:
+    get:
+      tags: [Приобретения]
+      operationId: listActiveSubscriptions
+      summary: Получить активные подписки пользователя
+      description: |
+        Доступ активен, если valid_from уже наступил, valid_until ещё не наступил
+        или отсутствует, а период не отозван. Демо-подписка имеет срок выбранного тарифа
+        и не продлевается автоматически. При активном доступе к «Курс+» карточка курса
+        этой подписки предлагает открыть курс без повторного подключения.
+      responses:
+        '200':
+          description: Активные периоды из mvp.subscription_access. При отсутствии доступа — пустой массив.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/SubscriptionAccess' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /subscriptions/offers:
+    get:
+      tags: [Приобретения]
+      operationId: listSubscriptionOffers
+      summary: Получить тарифы «Курс+»
+      description: Для аккаунта с действующей подпиской список предложений по ней пуст.
+      security:
+        - bearerAuth: []
+        - {}
+      responses:
+        '200':
+          description: Доступные демонстрационные тарифы подписки.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/SubscriptionOffer' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/favorite-folders:
+    get:
+      tags: [Избранное]
+      operationId: listFavoriteFolders
+      summary: Получить папки избранного
+      responses:
+        '200':
+          description: Папки текущего пользователя по дате создания.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/FavoriteFolder' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Избранное]
+      operationId: createFavoriteFolder
+      summary: Создать папку избранного
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/FavoriteFolderInput' }
+      responses:
+        '201': { $ref: '#/components/responses/FavoriteFolder' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/favorite-folders/{folder_id}:
+    parameters:
+      - $ref: '#/components/parameters/FolderId'
+    patch:
+      tags: [Избранное]
+      operationId: renameFavoriteFolder
+      summary: Переименовать папку
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/FavoriteFolderInput' }
+      responses:
+        '200': { $ref: '#/components/responses/FavoriteFolder' }
+        '409': { $ref: '#/components/responses/DefaultFolderProtected' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+    delete:
+      tags: [Избранное]
+      operationId: deleteFavoriteFolder
+      summary: Удалить папку с её сохранениями
+      description: Удаляет пользовательскую папку и её связи атомарно. Сохранения в других папках остаются.
+      responses:
+        '204':
+          description: Папка удалена.
+        '409': { $ref: '#/components/responses/DefaultFolderProtected' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/favorite-folders/{folder_id}/materials:
+    parameters:
+      - $ref: '#/components/parameters/FolderId'
+    get:
+      tags: [Избранное]
+      operationId: listFavoriteMaterials
+      summary: Получить материалы папки
+      responses:
+        '200':
+          description: Сохранения в папке, новые сначала.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/FavoriteMaterial' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/favorite-folders/{folder_id}/materials/{material_id}:
+    parameters:
+      - $ref: '#/components/parameters/FolderId'
+      - $ref: '#/components/parameters/MaterialId'
+    put:
+      tags: [Избранное]
+      operationId: addFavoriteMaterial
+      summary: Сохранить материал в папку
+      description: Один материал может быть в нескольких папках. Повторное сохранение возвращает 204.
+      responses:
+        '204':
+          description: Материал сохранён.
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+    delete:
+      tags: [Избранное]
+      operationId: removeFavoriteMaterial
+      summary: Убрать материал из папки
+      description: Можно убрать и материал, скрытый из каталога.
+      responses:
+        '204':
+          description: В папке нет сохранения этого материала.
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+  /me/email-preferences:
+    get:
+      tags: [Рассылка]
+      operationId: getEmailPreferences
+      summary: Получить настройки маркетинговой рассылки
+      responses:
+        '200': { $ref: '#/components/responses/EmailPreferences' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    put:
+      tags: [Рассылка]
+      operationId: updateEmailPreferences
+      summary: Дать или отозвать согласие на рассылку
+      description: |
+        Согласие по умолчанию выключено. Версия соответствует тексту согласия,
+        который видел пользователь. Согласие проверяется перед каждой отправкой.
+        Для отписки пользователь передаёт marketing_consent со значением false.
+        Бэкенд отправляет письма о релевантных или новых материалах и напоминания
+        о сохранённом по настроенным правилам рассылки.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EmailPreferencesInput' }
+      responses:
+        '200': { $ref: '#/components/responses/EmailPreferences' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/InvalidInput' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Подписанный JWT локального аккаунта в заголовке Authorization. По истечении срока пользователь входит заново.
+  parameters:
+    MaterialId:
+      name: material_id
+      in: path
+      required: true
+      schema: { $ref: '#/components/schemas/Uuid' }
+    ListId:
+      name: list_id
+      in: path
+      required: true
+      schema: { $ref: '#/components/schemas/Uuid' }
+    FolderId:
+      name: folder_id
+      in: path
+      required: true
+      schema: { $ref: '#/components/schemas/Uuid' }
+  responses:
+    AuthSession:
+      description: Аккаунт и токен доступа.
+      headers:
+        Cache-Control:
+          schema: { type: string, const: no-store }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AuthSession' }
+    Unauthorized:
+      description: Токен отсутствует в защищённом запросе, недействителен или истёк. Код unauthorized.
+      headers:
+        WWW-Authenticate:
+          schema: { type: string, example: Bearer }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Ресурс недоступен или отсутствует. Чужие папки, карты и подборки возвращают тот же ответ. Код not_found.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    InvalidInput:
+      description: Некорректные поля запроса или их сочетание. Код validation_error.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    QuestionnaireUnavailable:
+      description: Форма ещё не настроена. Код questionnaire_not_available.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    QuestionnaireChanged:
+      description: Версия формы устарела. Код questionnaire_version_mismatch.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    DefaultFolderProtected:
+      description: Папка по умолчанию защищена от переименования и удаления. Код default_folder_protected.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Roadmap:
+      description: Упорядоченная карта достижения цели.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Roadmap' }
+    EmailPreferences:
+      description: Текущие настройки согласия.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/EmailPreferences' }
+    RankingUnavailable:
+      description: RecSys временно недоступен. Запрос можно повторить. Код ranking_unavailable.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    RecommendationList:
+      description: Подборка с карточками и объяснениями.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/RecommendationList' }
+    Purchase:
+      description: Демо-приобретение. Сумма отражает цену с применённой скидкой, если она полагалась.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Purchase' }
+    FavoriteFolder:
+      description: Папка избранного.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/FavoriteFolder' }
+
+  schemas:
+    Uuid:
+      type: string
+      format: uuid
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string, example: validation_error }
+        message: { type: string, example: Проверьте указанные поля }
+        fields:
+          type: array
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field: { type: string, example: answers.current_task }
+              message: { type: string, example: Выберите один из вариантов }
+
+    Credentials:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, format: password, minLength: 1, maxLength: 128, writeOnly: true }
+
+    Registration:
+      allOf:
+        - $ref: '#/components/schemas/Credentials'
+        - type: object
+          properties:
+            password: { minLength: 8 }
+
+    AuthSession:
+      type: object
+      required: [access_token, token_type, expires_in, user]
+      properties:
+        access_token: { type: string, description: Подписанный JWT для доступа к защищённым операциям. }
+        token_type: { type: string, const: Bearer }
+        expires_in: { type: integer, minimum: 1, description: Срок действия в секундах. }
+        user: { $ref: '#/components/schemas/Account' }
+
+    Account:
+      type: object
+      required: [id, email, created_at, onboarding_completed]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        email: { type: string, format: email }
+        created_at: { type: string, format: date-time }
+        onboarding_completed:
+          type: boolean
+          description: Есть хотя бы одна полностью заполненная анкета, включая предыдущие версии.
+
+    Questionnaire:
+      type: object
+      required: [form_type, questionnaire_version, questions]
+      properties:
+        form_type: { $ref: '#/components/schemas/FormType' }
+        questionnaire_version: { type: string, minLength: 1 }
+        questions:
+          type: array
+          description: Упорядоченный список. Ключи уникальны внутри версии.
+          items: { $ref: '#/components/schemas/Question' }
+
+    Question:
+      type: object
+      required: [key, label, type, required]
+      properties:
+        key: { type: string, pattern: '^[a-z][a-z0-9_]*$' }
+        label: { type: string, minLength: 1 }
+        type: { type: string, enum: [single_select, multi_select, text] }
+        required: { type: boolean }
+        options:
+          type: array
+          minItems: 1
+          description: Варианты с уникальными значениями для вопросов с выбором.
+          items:
+            type: object
+            required: [value, label]
+            properties:
+              value: { type: string, minLength: 1 }
+              label: { type: string, minLength: 1 }
+        max_length: { type: integer, minimum: 1, description: Максимум символов для текстового ответа. }
+      allOf:
+        - if:
+            properties:
+              type: { const: text }
+          then:
+            required: [max_length]
+            properties:
+              options: false
+          else:
+            required: [options]
+            properties:
+              max_length: false
+
+    OnboardingInput:
+      type: object
+      additionalProperties: false
+      required: [form_type, questionnaire_version, answers]
+      properties:
+        form_type: { $ref: '#/components/schemas/FormType' }
+        questionnaire_version: { type: string, minLength: 1 }
+        status:
+          $ref: '#/components/schemas/OnboardingStatus'
+          default: completed
+        answers: { $ref: '#/components/schemas/QuestionnaireAnswers' }
+      if:
+        required: [status]
+        properties:
+          status: { const: skipped }
+      then:
+        properties:
+          answers: { maxProperties: 0 }
+
+    FormType:
+      type: string
+      enum: [simple, advanced]
+
+    OnboardingStatus:
+      type: string
+      enum: [partial, completed, skipped]
+
+    QuestionnaireAnswers:
+      type: object
+      description: |
+        Ключи соответствуют key в указанной версии анкеты. Текст и одиночный выбор передаются строкой,
+        множественный выбор — массивом значений. Пропущенный ключ оставляет прежнее значение
+        профиля, null означает явный сброс.
+        Ответы хранятся в JSONB, правила конкретной версии проверяет бэкенд.
+      propertyNames:
+        pattern: '^[a-z][a-z0-9_]*$'
+      additionalProperties:
+        oneOf:
+          - type: 'null'
+          - { type: string, minLength: 1 }
+          - type: array
+            minItems: 1
+            uniqueItems: true
+            items: { type: string, minLength: 1 }
+
+    OnboardingResponse:
+      type: object
+      required: [id, form_type, questionnaire_version, status, answers, created_at, submitted_at, completed_at]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        form_type: { $ref: '#/components/schemas/FormType' }
+        questionnaire_version: { type: string }
+        status: { $ref: '#/components/schemas/OnboardingStatus' }
+        answers: { $ref: '#/components/schemas/QuestionnaireAnswers' }
+        created_at: { type: string, format: date-time }
+        submitted_at: { type: string, format: date-time }
+        completed_at: { type: [string, 'null'], format: date-time }
+      if:
+        properties:
+          status: { const: completed }
+      then:
+        properties:
+          completed_at: { type: string }
+      else:
+        properties:
+          completed_at: { type: 'null' }
+
+    NamedItem:
+      type: object
+      required: [id, title]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        title: { type: string }
+
+    MaterialKind:
+      type: string
+      enum: [course, article, document]
+
+    MaterialCard:
+      type: object
+      required: [id, kind, title, duration_minutes, topics, industries, skills, access_type, access, offers, primary_action, is_favorite]
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+          description: ID из mvp.materials.
+        kind: { $ref: '#/components/schemas/MaterialKind' }
+        title: { type: string }
+        duration_minutes: { type: [integer, 'null'], minimum: 1 }
+        topics:
+          type: array
+          items: { $ref: '#/components/schemas/NamedItem' }
+        industries:
+          type: array
+          items: { $ref: '#/components/schemas/NamedItem' }
+        skills:
+          type: array
+          items: { $ref: '#/components/schemas/NamedItem' }
+        access_type: { type: string, enum: [free, paid, unknown] }
+        access:
+          type: string
+          enum: [free, course_purchase, subscription, none, unknown]
+          description: Доступ текущего пользователя. unknown означает, что условия ещё не подтверждены.
+        course_id:
+          $ref: '#/components/schemas/Uuid'
+          description: Исходный Courses.Id для POST /me/purchases. Присутствует только у курса.
+        offers:
+          type: array
+          description: Предложения для курсов, к которым у пользователя ещё нет доступа.
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/CourseOffer'
+              - $ref: '#/components/schemas/SubscriptionOffer'
+        primary_action:
+          anyOf:
+            - $ref: '#/components/schemas/MaterialAction'
+            - type: 'null'
+          description: null, если действие недоступно. При доступе по «Курс+» предлагается открыть курс.
+        is_favorite: { type: boolean, description: Материал есть хотя бы в одной папке текущего пользователя. }
+      allOf:
+        - if:
+            properties:
+              kind: { const: course }
+          then:
+            required: [course_id]
+          else:
+            properties:
+              course_id: false
+              offers: { maxItems: 0 }
+        - if:
+            properties:
+              access: { enum: [free, course_purchase, subscription, unknown] }
+          then:
+            properties:
+              offers: { maxItems: 0 }
+              primary_action:
+                properties:
+                  type: { enum: [open_course, read_article, open_document, download_document] }
+        - if:
+            properties:
+              access: { const: none }
+          then:
+            properties:
+              primary_action:
+                properties:
+                  type: { enum: [buy_course, subscribe] }
+        - if:
+            properties:
+              access: { const: unknown }
+          then:
+            properties:
+              primary_action: { type: 'null' }
+        - if:
+            properties:
+              kind: { const: article }
+          then:
+            properties:
+              access: { enum: [free, none, unknown] }
+              primary_action:
+                properties:
+                  type: { const: read_article }
+        - if:
+            properties:
+              kind: { const: document }
+          then:
+            properties:
+              access: { enum: [free, none, unknown] }
+              primary_action:
+                properties:
+                  type: { enum: [open_document, download_document] }
+        - if:
+            properties:
+              kind: { const: course }
+          then:
+            properties:
+              primary_action:
+                properties:
+                  type: { enum: [open_course, buy_course, subscribe] }
+
+    MaterialDetail:
+      allOf:
+        - $ref: '#/components/schemas/MaterialCard'
+        - type: object
+          required: [description, explanation, related_materials]
+          properties:
+            description: { type: [string, 'null'] }
+            explanation: { type: [string, 'null'], description: Подходящий персональный текст или общий базовый текст. }
+            related_materials:
+              type: array
+              maxItems: 3
+              items: { $ref: '#/components/schemas/MaterialCard' }
+
+    MaterialAction:
+      oneOf:
+        - type: object
+          required: [type, url]
+          properties:
+            type: { type: string, enum: [open_course, read_article, open_document, download_document] }
+            url: { type: string, format: uri }
+        - type: object
+          required: [type]
+          properties:
+            type: { type: string, const: buy_course }
+        - type: object
+          required: [type, subscription_tariff_id]
+          properties:
+            type: { type: string, const: subscribe }
+            subscription_tariff_id: { $ref: '#/components/schemas/Uuid' }
+
+    DemoPrice:
+      type: object
+      description: |
+        Демо-цена берётся из проверенных исторических значений Courses, CourseTariffBindings
+        или SubscriptionTariffs либо из настроек демо-каталога. Отсутствие цены в дампе
+        само по себе не означает бесплатность.
+      required: [amount_minor, currency, source]
+      properties:
+        amount_minor: { type: integer, minimum: 1 }
+        currency: { type: string, const: RUB }
+        source:
+          type: string
+          enum: [historical_dump, demo_config]
+      example: { amount_minor: 399000, currency: RUB, source: historical_dump }
+
+    CourseOffer:
+      type: object
+      required: [kind, price, discounted_amount_minor]
+      properties:
+        kind: { type: string, const: course }
+        price: { $ref: '#/components/schemas/DemoPrice' }
+        discounted_amount_minor:
+          type: [integer, 'null']
+          minimum: 0
+          description: Цена с наиболее выгодной применимой скидкой пользователя. Иначе null.
+
+    SubscriptionOffer:
+      type: object
+      required: [kind, subscription_id, subscription_tariff_id, title, price, discounted_amount_minor, duration_months]
+      properties:
+        kind: { type: string, const: subscription }
+        subscription_id: { $ref: '#/components/schemas/Uuid' }
+        subscription_tariff_id: { $ref: '#/components/schemas/Uuid' }
+        title: { type: string, example: Курс+ }
+        price: { $ref: '#/components/schemas/DemoPrice' }
+        discounted_amount_minor:
+          type: [integer, 'null']
+          minimum: 0
+          description: Цена с наиболее выгодной применимой скидкой пользователя. Иначе null.
+        duration_months: { type: integer, minimum: 1 }
+      examples:
+        - kind: subscription
+          subscription_id: 'd73c22ce-8405-4740-b370-c94d74b75afa'
+          subscription_tariff_id: '28d95391-9bfe-433a-952a-43135b52ce9c'
+          title: Курс+
+          price: { amount_minor: 99000, currency: RUB, source: historical_dump }
+          discounted_amount_minor: null
+          duration_months: 1
+        - kind: subscription
+          subscription_id: 'd73c22ce-8405-4740-b370-c94d74b75afa'
+          subscription_tariff_id: '7c654302-bbe3-4458-82c8-90e4d2ac9c1c'
+          title: Курс+
+          price: { amount_minor: 49500, currency: RUB, source: historical_dump }
+          discounted_amount_minor: null
+          duration_months: 1
+
+    Preferences:
+      type: object
+      required: [stage_code, industry_code, goal_code, learning_mode, profile_config_version, updated_at]
+      properties:
+        stage_code: { type: [string, 'null'] }
+        industry_code: { type: [string, 'null'] }
+        goal_code: { type: [string, 'null'] }
+        learning_mode: { enum: [quick, practical, trajectory, null] }
+        profile_config_version: { type: string }
+        updated_at: { type: string, format: date-time }
+
+    FeedFormat:
+      type: string
+      enum: [quick, medium]
+
+    FeedInput:
+      type: object
+      additionalProperties: false
+      properties:
+        format: { $ref: '#/components/schemas/FeedFormat' }
+        onboarding: { $ref: '#/components/schemas/OnboardingInput' }
+
+    MaterialExplanationInput:
+      type: object
+      additionalProperties: false
+      properties:
+        onboarding: { $ref: '#/components/schemas/OnboardingInput' }
+
+    MaterialExplanation:
+      type: object
+      additionalProperties: false
+      required: [material_id, kind, explanation, offer_text]
+      properties:
+        material_id: { $ref: '#/components/schemas/Uuid' }
+        kind: { $ref: '#/components/schemas/MaterialKind' }
+        explanation:
+          type: string
+          minLength: 1
+          description: 1–2 предложения по публичным фактам и известным предпочтениям, либо нейтральный шаблон.
+        offer_text:
+          type: [string, 'null']
+          description: Допустим только для курса; может быть null и у курса.
+      if:
+        properties:
+          kind: { enum: [article, document] }
+      then:
+        properties:
+          offer_text: { type: 'null' }
+
+    RecommendationList:
+      type: object
+      required: [id, mode, format, saved_at, items]
+      properties:
+        id:
+          type: [string, 'null']
+          format: uuid
+          description: ID для персональной витрины аккаунта. Для временной или популярной витрины null.
+        mode: { type: string, enum: [popular, personalized] }
+        format:
+          anyOf:
+            - $ref: '#/components/schemas/FeedFormat'
+            - type: 'null'
+        saved_at: { type: [string, 'null'], format: date-time }
+        items:
+          type: array
+          maxItems: 6
+          items: { $ref: '#/components/schemas/RecommendationItem' }
+      if:
+        properties:
+          mode: { const: popular }
+      then:
+        properties:
+          id: { type: 'null' }
+          format: { type: 'null' }
+          saved_at: { type: 'null' }
+          items:
+            items:
+              properties:
+                explanation: { type: 'null' }
+                offer_text: { type: 'null' }
+      else:
+        properties:
+          format: { $ref: '#/components/schemas/FeedFormat' }
+          items:
+            items:
+              properties:
+                explanation: { type: string, minLength: 1 }
+
+    RecommendationItem:
+      type: object
+      required: [position, material, explanation, offer_text]
+      properties:
+        position: { type: integer, minimum: 1 }
+        material: { $ref: '#/components/schemas/MaterialCard' }
+        explanation: { type: [string, 'null'], description: Краткое объяснение пользы материала. }
+        offer_text: { type: [string, 'null'], description: Персональный продающий текст для курса. }
+      if:
+        properties:
+          material:
+            properties:
+              kind: { enum: [article, document] }
+      then:
+        properties:
+          offer_text: { type: 'null' }
+
+    MaterialStudyStateInput:
+      type: object
+      additionalProperties: false
+      required: [is_studied]
+      properties:
+        is_studied:
+          type: boolean
+          description: true — отметить изученным во всех картах аккаунта, false — снять отметку.
+
+    Roadmap:
+      type: object
+      required: [id, title, summary, saved_at, steps]
+      properties:
+        id: { type: [string, 'null'], format: uuid }
+        title: { type: string, minLength: 1 }
+        summary: { type: string, minLength: 1, description: Ожидаемый результат маршрута. }
+        saved_at: { type: [string, 'null'], format: date-time }
+        steps:
+          type: array
+          minItems: 1
+          description: |
+            Шаги в порядке прохождения. Следующий материал определяется позицией.
+            is_studied читается из текущих отметок аккаунта при каждом возврате карты,
+            включая сохранённые, новые и временные карты. У гостя всегда false.
+            Это состояние материала, а не статус прохождения конкретного шага.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/RecommendationItem'
+              - type: object
+                required: [step_role, transition_text, is_studied]
+                properties:
+                  explanation: { type: string, minLength: 1 }
+                  step_role: { type: string, enum: [intro, practice, advanced] }
+                  is_studied:
+                    type: boolean
+                    description: Общая ручная отметка текущего пользователя для этого материала во всех его картах.
+                  transition_text:
+                    type: [string, 'null']
+                    description: Почему этот шаг следует за предыдущим. У первого шага null.
+                if:
+                  properties:
+                    position: { const: 1 }
+                then:
+                  properties:
+                    transition_text: { type: 'null' }
+                else:
+                  properties:
+                    transition_text: { type: string, minLength: 1 }
+
+    DiscountGrant:
+      type: object
+      required: [id, reason, status, granted_at, expires_at, redeemed_at, value]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        reason:
+          type: string
+          minLength: 1
+          examples: [onboarding, course_completion, promotion]
+        status:
+          type: string
+          enum: [available, redeemed, expired]
+          description: |
+            available — скидка действует и ещё не использована, redeemed — применена,
+            expired — срок истёк до применения. Применённая скидка сохраняет статус redeemed.
+        granted_at: { type: string, format: date-time }
+        expires_at:
+          type: [string, 'null']
+          format: date-time
+          description: Момент окончания действия, исключая этот момент. null — без срока.
+        redeemed_at: { type: [string, 'null'], format: date-time }
+        value:
+          description: Процент округляется вниз до копейки. Фиксированная скидка ограничена ценой предложения.
+          oneOf:
+            - type: object
+              additionalProperties: false
+              required: [kind, percent]
+              properties:
+                kind: { type: string, const: percent }
+                percent: { type: integer, minimum: 1, maximum: 100 }
+            - type: object
+              additionalProperties: false
+              required: [kind, amount_minor]
+              properties:
+                kind: { type: string, const: fixed }
+                amount_minor: { type: integer, minimum: 1 }
+
+    PurchaseInput:
+      type: object
+      additionalProperties: false
+      required: [request_id, kind]
+      properties:
+        request_id:
+          $ref: '#/components/schemas/Uuid'
+          description: Уникальный ID попытки, сохраняется как ID приобретения при успехе.
+        kind: { type: string, enum: [course, subscription] }
+        course_id: { $ref: '#/components/schemas/Uuid' }
+        subscription_tariff_id: { $ref: '#/components/schemas/Uuid' }
+      allOf:
+        - $ref: '#/components/schemas/PurchaseTarget'
+
+    PurchaseTarget:
+      type: object
+      if:
+        required: [kind]
+        properties:
+          kind: { const: course }
+      then:
+        required: [course_id]
+        properties:
+          subscription_tariff_id: false
+      else:
+        required: [subscription_tariff_id]
+        properties:
+          course_id: false
+
+    Purchase:
+      type: object
+      required: [id, kind, amount_minor, currency, created_at, mode]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        kind: { type: string, enum: [course, subscription] }
+        course_id: { $ref: '#/components/schemas/Uuid' }
+        subscription_tariff_id: { $ref: '#/components/schemas/Uuid' }
+        amount_minor:
+          type: [integer, 'null']
+          minimum: 0
+          description: Итоговая демо-цена после скидки. null только для ранее подготовленной записи без цены.
+        currency: { type: string, const: RUB }
+        created_at: { type: string, format: date-time }
+        mode: { type: string, const: demo }
+      allOf:
+        - $ref: '#/components/schemas/PurchaseTarget'
+
+    SubscriptionAccess:
+      type: object
+      required: [id, subscription_id, title, valid_from, valid_until]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        subscription_id: { $ref: '#/components/schemas/Uuid' }
+        title: { type: string, example: Курс+ }
+        valid_from: { type: string, format: date-time }
+        valid_until: { type: [string, 'null'], format: date-time }
+
+    FavoriteFolderInput:
+      type: object
+      additionalProperties: false
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: '\S'
+          description: Имя папки. Пробелы по краям удаляются при сохранении.
+
+    FavoriteFolder:
+      type: object
+      required: [id, name, is_default, created_at]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        name: { type: string }
+        is_default: { type: boolean }
+        created_at: { type: string, format: date-time }
+
+    FavoriteMaterial:
+      type: object
+      required: [material_id, created_at, material]
+      properties:
+        material_id: { $ref: '#/components/schemas/Uuid' }
+        created_at: { type: string, format: date-time }
+        material:
+          description: Карточка сохранённого материала. null, если материал скрыт.
+          anyOf:
+            - $ref: '#/components/schemas/MaterialCard'
+            - type: 'null'
+
+    EmailPreferencesInput:
+      type: object
+      additionalProperties: false
+      required: [marketing_consent]
+      properties:
+        marketing_consent: { type: boolean }
+        consent_version: { type: string, minLength: 1 }
+      if:
+        properties:
+          marketing_consent: { const: true }
+      then:
+        required: [consent_version]
+
+    EmailPreferences:
+      type: object
+      required: [marketing_consent, consent_version, consent_updated_at, unsubscribed_at]
+      properties:
+        marketing_consent: { type: boolean }
+        consent_version: { type: [string, 'null'] }
+        consent_updated_at: { type: [string, 'null'], format: date-time }
+        unsubscribed_at: { type: [string, 'null'], format: date-time }

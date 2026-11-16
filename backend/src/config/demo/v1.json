@@ -1,0 +1,202 @@
+{
+  "version": "1",
+  "profile_config_version": "1",
+  "questionnaire": {
+    "form_type": "simple",
+    "questionnaire_version": "1",
+    "questions": [
+      {
+        "key": "business_stage",
+        "label": "На каком этапе ваш бизнес?",
+        "type": "single_select",
+        "required": true,
+        "options": [
+          {
+            "value": "starting",
+            "label": "Запускаю бизнес"
+          },
+          {
+            "value": "operating",
+            "label": "Бизнес уже работает"
+          }
+        ]
+      },
+      {
+        "key": "current_task",
+        "label": "Какую задачу вы хотите решить?",
+        "type": "single_select",
+        "required": true,
+        "options": [
+          {
+            "value": "sales",
+            "label": "Увеличить продажи"
+          },
+          {
+            "value": "marketing",
+            "label": "Настроить маркетинг"
+          },
+          {
+            "value": "finance",
+            "label": "Разобраться с финансами и учётом"
+          },
+          {
+            "value": "management",
+            "label": "Улучшить управление"
+          },
+          {
+            "value": "other",
+            "label": "Другая задача"
+          }
+        ]
+      },
+      {
+        "key": "learning_mode",
+        "label": "Как вам удобнее учиться?",
+        "type": "single_select",
+        "required": false,
+        "options": [
+          {
+            "value": "quick",
+            "label": "Быстро разобраться"
+          },
+          {
+            "value": "practical",
+            "label": "Попрактиковаться"
+          },
+          {
+            "value": "trajectory",
+            "label": "Учиться последовательно"
+          }
+        ]
+      }
+    ]
+  },
+  "answer_projection": {
+    "business_stage": "stage_code",
+    "current_task": "goal_code",
+    "learning_mode": "learning_mode"
+  },
+  "goals": {
+    "sales": {
+      "topic_ids": [
+        "6541a087-3b32-5f66-87a5-c9b3b386ec53"
+      ],
+      "tag_ids": [
+        "9adc5662-855a-54db-bd20-766b15174ab9"
+      ]
+    },
+    "finance": {
+      "topic_ids": [
+        "4fa1c057-6b5b-591e-ad75-d37a61736c66"
+      ],
+      "tag_ids": [
+        "b5c04e6e-488e-5c17-836c-248805d89d4a"
+      ]
+    }
+  },
+  "industries": [
+    {
+      "code": "demo",
+      "label": "Тестовая отрасль",
+      "industry_id": "93a93639-196c-5837-97f1-e8a96b637605"
+    }
+  ],
+  "skills": [
+    {
+      "id": "2ee02ab5-6fab-5da4-b005-658cf94b836b",
+      "title": "Продажи — навык",
+      "tag_ids": [
+        "9adc5662-855a-54db-bd20-766b15174ab9"
+      ]
+    },
+    {
+      "id": "26da8076-3de7-5055-a40d-d1cf0a1460a0",
+      "title": "Финансы — навык",
+      "tag_ids": [
+        "b5c04e6e-488e-5c17-836c-248805d89d4a"
+      ]
+    }
+  ],
+  "catalog": {
+    "published_status_ids": [
+      "4759e60c-22f2-5498-9506-cd01ffb9d02b"
+    ],
+    "entity_type_ids": {
+      "course": "b1be58c4-3e05-5e4b-8f04-5d400cc538b2",
+      "article": "9c49e551-8a7b-576b-8fae-c5dc73b38a59",
+      "document": "c806d570-fa58-5f73-8ea4-ec9dcc6bae64"
+    },
+    "popularity": {
+      "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e": 100,
+      "bb6719d7-1fd0-5246-990a-b4981b3cc343": 100,
+      "c1eca8b4-8d7b-5a0a-b8a7-5fe63fb23f84": 100,
+      "10926149-a496-5c22-a447-214125b4d4f4": 100,
+      "550b99dd-27de-583f-a386-9df89dcf49e9": 100,
+      "1df15623-ecba-501d-ab29-630c1dcbfa04": 100,
+      "dd1c27d2-f64b-5537-939c-4224106f2557": 0,
+      "4f4f8458-a082-54ca-be9c-90c266f52090": 0
+    },
+    "popularity_tiebreak": [
+      "title",
+      "id"
+    ]
+  },
+  "access": {
+    "free_material_ids": [
+      "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+      "bb6719d7-1fd0-5246-990a-b4981b3cc343",
+      "10926149-a496-5c22-a447-214125b4d4f4",
+      "550b99dd-27de-583f-a386-9df89dcf49e9"
+    ],
+    "course_prices": {
+      "6d78dae7-6fc0-5cf7-bff8-689287d41a39": {
+        "amount_minor": 199000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "ac3b717e-923e-5e5d-829c-410a6392c5d7": {
+        "amount_minor": 299000,
+        "currency": "RUB",
+        "source": "demo_config"
+      }
+    },
+    "offer_order": [
+      "course",
+      "subscription"
+    ]
+  },
+  "subscriptions": {
+    "tariffs": {
+      "ad78212c-f237-5804-88a5-9689f190ab88": {
+        "subscription_id": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "price": {
+          "amount_minor": 99000,
+          "currency": "RUB",
+          "source": "demo_config"
+        },
+        "duration_months": 1
+      }
+    }
+  },
+  "welcome_discount": {
+    "percent": 10,
+    "duration_days": 7,
+    "first_paid_course_only": true,
+    "subscription_eligible": false
+  },
+  "favorites": {
+    "default_folder_name": "Избранное"
+  },
+  "email": {
+    "delivery": "local_only",
+    "consent_version": "demo-1",
+    "consent_text": "Я согласен получать тестовые маркетинговые письма."
+  },
+  "migration_constraints": {
+    "excluded_tables": [
+      "mvp.events"
+    ],
+    "generation_runs": "Included with nullable references; agreement covers postponing diagnostics.",
+    "source_schema": "Migrations manage public and mvp."
+  }
+}

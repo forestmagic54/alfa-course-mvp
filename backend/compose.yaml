@@ -1,0 +1,55 @@
+services:
+  backend:
+    build: .
+    image: backend:local
+    env_file:
+      - .env.example
+      - path: .env
+        required: false
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-backend}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_password}
+      POSTGRES_DB: ${POSTGRES_DB:-backend}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      HOST: 0.0.0.0
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+  migrate:
+    image: backend:local
+    build: .
+    command: ["alembic", "upgrade", "head"]
+    env_file:
+      - .env.example
+      - path: .env
+        required: false
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-backend}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_password}
+      POSTGRES_DB: ${POSTGRES_DB:-backend}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-backend}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_password}
+      POSTGRES_DB: ${POSTGRES_DB:-backend}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres_data:

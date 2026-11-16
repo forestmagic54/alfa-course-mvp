@@ -1,0 +1,432 @@
+{
+  "version": "2",
+  "profile_config_version": "2",
+  "questionnaire": {
+    "form_type": "simple",
+    "questionnaire_version": "1",
+    "questions": [
+      {
+        "key": "business_stage",
+        "label": "На каком этапе ваш бизнес?",
+        "type": "single_select",
+        "required": true,
+        "options": [
+          {
+            "value": "starting",
+            "label": "Запускаю бизнес"
+          },
+          {
+            "value": "operating",
+            "label": "Бизнес уже работает"
+          }
+        ]
+      },
+      {
+        "key": "current_task",
+        "label": "Какую задачу вы хотите решить?",
+        "type": "single_select",
+        "required": true,
+        "options": [
+          {
+            "value": "sales",
+            "label": "Увеличить продажи"
+          },
+          {
+            "value": "marketing",
+            "label": "Настроить маркетинг"
+          },
+          {
+            "value": "finance",
+            "label": "Разобраться с финансами и учётом"
+          },
+          {
+            "value": "management",
+            "label": "Улучшить управление"
+          },
+          {
+            "value": "other",
+            "label": "Другая задача"
+          }
+        ]
+      },
+      {
+        "key": "learning_mode",
+        "label": "Как вам удобнее учиться?",
+        "type": "single_select",
+        "required": false,
+        "options": [
+          {
+            "value": "quick",
+            "label": "Быстро разобраться"
+          },
+          {
+            "value": "practical",
+            "label": "Попрактиковаться"
+          },
+          {
+            "value": "trajectory",
+            "label": "Учиться последовательно"
+          }
+        ]
+      }
+    ]
+  },
+  "answer_projection": {
+    "business_stage": "stage_code",
+    "current_task": "goal_code",
+    "learning_mode": "learning_mode"
+  },
+  "goals": {
+    "sales": {
+      "topic_ids": [
+        "6541a087-3b32-5f66-87a5-c9b3b386ec53"
+      ],
+      "tag_ids": [
+        "9adc5662-855a-54db-bd20-766b15174ab9"
+      ]
+    },
+    "finance": {
+      "topic_ids": [
+        "4fa1c057-6b5b-591e-ad75-d37a61736c66"
+      ],
+      "tag_ids": [
+        "b5c04e6e-488e-5c17-836c-248805d89d4a"
+      ]
+    },
+    "marketing": {
+      "topic_ids": [
+        "154f75d4-0ecb-57ac-84ff-3dc8af928368"
+      ],
+      "tag_ids": [
+        "728869bb-aa53-55b0-868f-d1a334bf1237"
+      ]
+    },
+    "management": {
+      "topic_ids": [
+        "afa6d08f-f608-5793-a7c3-5df64d38d5dc"
+      ],
+      "tag_ids": [
+        "9e3225ee-3dc4-5b60-9fd7-603d447b31c6"
+      ]
+    }
+  },
+  "industries": [
+    {
+      "code": "demo",
+      "label": "Тестовая отрасль",
+      "industry_id": "93a93639-196c-5837-97f1-e8a96b637605"
+    },
+    {
+      "code": "retail",
+      "label": "Розничная торговля (демо)",
+      "industry_id": "2bfb2a25-0232-5be6-9d7d-8faf30ad47a6"
+    },
+    {
+      "code": "services",
+      "label": "Услуги (демо)",
+      "industry_id": "be243611-d514-5079-99bd-addbd13e95bc"
+    }
+  ],
+  "skills": [
+    {
+      "id": "2ee02ab5-6fab-5da4-b005-658cf94b836b",
+      "title": "Продажи — навык",
+      "tag_ids": [
+        "9adc5662-855a-54db-bd20-766b15174ab9"
+      ]
+    },
+    {
+      "id": "26da8076-3de7-5055-a40d-d1cf0a1460a0",
+      "title": "Финансы — навык",
+      "tag_ids": [
+        "b5c04e6e-488e-5c17-836c-248805d89d4a"
+      ]
+    },
+    {
+      "id": "e12b2351-ff65-5fb5-badd-0677ee149ab6",
+      "title": "Маркетинг",
+      "tag_ids": [
+        "728869bb-aa53-55b0-868f-d1a334bf1237"
+      ]
+    },
+    {
+      "id": "79af777f-11f6-53a0-80f6-b57725ecd878",
+      "title": "Управление",
+      "tag_ids": [
+        "9e3225ee-3dc4-5b60-9fd7-603d447b31c6"
+      ]
+    }
+  ],
+  "catalog": {
+    "published_status_ids": [
+      "4759e60c-22f2-5498-9506-cd01ffb9d02b"
+    ],
+    "entity_type_ids": {
+      "course": "b1be58c4-3e05-5e4b-8f04-5d400cc538b2",
+      "article": "9c49e551-8a7b-576b-8fae-c5dc73b38a59",
+      "document": "c806d570-fa58-5f73-8ea4-ec9dcc6bae64"
+    },
+    "popularity": {
+      "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e": 100,
+      "bb6719d7-1fd0-5246-990a-b4981b3cc343": 100,
+      "c1eca8b4-8d7b-5a0a-b8a7-5fe63fb23f84": 100,
+      "10926149-a496-5c22-a447-214125b4d4f4": 100,
+      "550b99dd-27de-583f-a386-9df89dcf49e9": 100,
+      "1df15623-ecba-501d-ab29-630c1dcbfa04": 100,
+      "dd1c27d2-f64b-5537-939c-4224106f2557": 0,
+      "4f4f8458-a082-54ca-be9c-90c266f52090": 0,
+      "69a21b00-7910-51b3-b988-5550ea7685eb": 95,
+      "983496e7-e6a3-5855-9bad-a59770ccb84c": 93,
+      "1d86be2e-b5bd-5eb4-9f22-f5bcd5986ac5": 91,
+      "cbcba889-ab77-596a-9d6e-f49cfda342c5": 89,
+      "7349ee14-57d7-5cb6-b577-86b6d279d1da": 87,
+      "ab1f93c9-befe-5bfd-9ce3-de91d0f695e9": 85,
+      "0daf037f-4135-56f9-8630-ab2f3baf0ba7": 90,
+      "4704f178-cdff-5fea-9466-a76730761317": 88,
+      "875bd992-deab-5e0f-8dab-a0d841cbcd95": 86,
+      "b1c19c57-a9fe-5e61-896b-bfd67d6bad2d": 84,
+      "62f7a1f5-be1d-5b81-83d9-a3707a908cd1": 82,
+      "b4abe995-f173-555c-98ae-f0d96ee85ff3": 80,
+      "63a1d9ce-ce8d-5b70-9ddf-77449adeff19": 85,
+      "8da32e43-7a43-5f2e-a2bc-8e4541380396": 83,
+      "b811a624-2aa1-5f94-a0bf-d8d60e10ef84": 81,
+      "d883309c-56b1-5a85-a147-6d1607b6da03": 79,
+      "f3b6d484-caa6-554d-8e61-1b47962f31d1": 77,
+      "418e4240-707b-53a4-82ba-78b9327613ca": 75,
+      "8ff59323-9472-59b4-96d6-51e620d5cb41": 80,
+      "66263a9c-f26f-5de7-ad30-209d08cbeac5": 78,
+      "6015c9a9-27fc-56f7-9d31-93889282e053": 76,
+      "bd33ad2b-7b54-5d6f-ba65-2818021140e5": 74,
+      "9be38fb1-04aa-5bc2-834e-69e01439aa8d": 72,
+      "5ee18802-b1ba-5775-955e-269a640e1432": 70,
+      "2a0f5fca-f941-5ec0-bb96-f93a277ed7d4": 0,
+      "a453c6a4-5d7c-51a5-a052-8fa95532fe6c": 0,
+      "3df13346-5d52-544b-966d-82f7e1a4633f": 0,
+      "edc21def-2c46-5418-a844-14e850eaf342": 0,
+      "b46374e1-77ea-5a93-92df-0a021e8bd252": 0,
+      "b05ca5a2-6bb4-5478-99de-bceff8e3bc15": 0,
+      "d9f29b7c-3e99-53b1-a00d-86ae709acfcd": 0,
+      "260f17a2-f77f-539d-b97f-8bdead214fcf": 0,
+      "53cc820c-91d3-583a-b56c-f28a08ef8c8f": 0,
+      "202e4171-74ce-5356-9fab-80089203ffef": 0,
+      "12e427db-62cb-577b-b5ef-057714ccba8c": 0,
+      "650f7dc5-66cc-5c28-9461-5fdbc403ba58": 0,
+      "d1497bf9-65d7-5b3a-9e3b-a7b16d0f93f6": 0,
+      "aafebe4b-d8a4-54b9-9c1e-1feb9fbae9b2": 0,
+      "96e94135-df6f-55bb-ad40-7a8601074625": 0,
+      "436dc678-559f-5cc4-a13d-9c6ae8b90e70": 0
+    },
+    "popularity_tiebreak": [
+      "title",
+      "id"
+    ],
+    "duration_minutes": {
+      "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e": 30,
+      "bb6719d7-1fd0-5246-990a-b4981b3cc343": 30,
+      "c1eca8b4-8d7b-5a0a-b8a7-5fe63fb23f84": 30,
+      "10926149-a496-5c22-a447-214125b4d4f4": 30,
+      "550b99dd-27de-583f-a386-9df89dcf49e9": 30,
+      "1df15623-ecba-501d-ab29-630c1dcbfa04": 30,
+      "dd1c27d2-f64b-5537-939c-4224106f2557": 15,
+      "4f4f8458-a082-54ca-be9c-90c266f52090": 15,
+      "69a21b00-7910-51b3-b988-5550ea7685eb": 15,
+      "983496e7-e6a3-5855-9bad-a59770ccb84c": 20,
+      "1d86be2e-b5bd-5eb4-9f22-f5bcd5986ac5": 25,
+      "cbcba889-ab77-596a-9d6e-f49cfda342c5": 45,
+      "7349ee14-57d7-5cb6-b577-86b6d279d1da": 180,
+      "ab1f93c9-befe-5bfd-9ce3-de91d0f695e9": 480,
+      "0daf037f-4135-56f9-8630-ab2f3baf0ba7": 15,
+      "4704f178-cdff-5fea-9466-a76730761317": 20,
+      "875bd992-deab-5e0f-8dab-a0d841cbcd95": 25,
+      "b1c19c57-a9fe-5e61-896b-bfd67d6bad2d": 45,
+      "62f7a1f5-be1d-5b81-83d9-a3707a908cd1": 180,
+      "b4abe995-f173-555c-98ae-f0d96ee85ff3": 480,
+      "63a1d9ce-ce8d-5b70-9ddf-77449adeff19": 15,
+      "8da32e43-7a43-5f2e-a2bc-8e4541380396": 20,
+      "b811a624-2aa1-5f94-a0bf-d8d60e10ef84": 25,
+      "d883309c-56b1-5a85-a147-6d1607b6da03": 45,
+      "f3b6d484-caa6-554d-8e61-1b47962f31d1": 180,
+      "418e4240-707b-53a4-82ba-78b9327613ca": 480,
+      "8ff59323-9472-59b4-96d6-51e620d5cb41": 15,
+      "66263a9c-f26f-5de7-ad30-209d08cbeac5": 20,
+      "6015c9a9-27fc-56f7-9d31-93889282e053": 25,
+      "bd33ad2b-7b54-5d6f-ba65-2818021140e5": 45,
+      "9be38fb1-04aa-5bc2-834e-69e01439aa8d": 180,
+      "5ee18802-b1ba-5775-955e-269a640e1432": 480,
+      "2a0f5fca-f941-5ec0-bb96-f93a277ed7d4": 17,
+      "a453c6a4-5d7c-51a5-a052-8fa95532fe6c": 17,
+      "3df13346-5d52-544b-966d-82f7e1a4633f": 8,
+      "edc21def-2c46-5418-a844-14e850eaf342": 8,
+      "b46374e1-77ea-5a93-92df-0a021e8bd252": 7,
+      "b05ca5a2-6bb4-5478-99de-bceff8e3bc15": 10,
+      "d9f29b7c-3e99-53b1-a00d-86ae709acfcd": 240,
+      "260f17a2-f77f-539d-b97f-8bdead214fcf": 270,
+      "53cc820c-91d3-583a-b56c-f28a08ef8c8f": 120,
+      "202e4171-74ce-5356-9fab-80089203ffef": 25,
+      "12e427db-62cb-577b-b5ef-057714ccba8c": 90,
+      "650f7dc5-66cc-5c28-9461-5fdbc403ba58": 120,
+      "d1497bf9-65d7-5b3a-9e3b-a7b16d0f93f6": 120,
+      "aafebe4b-d8a4-54b9-9c1e-1feb9fbae9b2": 210,
+      "96e94135-df6f-55bb-ad40-7a8601074625": 120,
+      "436dc678-559f-5cc4-a13d-9c6ae8b90e70": 240
+    },
+    "demo_document_urls": {
+      "bb6719d7-1fd0-5246-990a-b4981b3cc343": "http://localhost:8000/demo-files/bb6719d7-1fd0-5246-990a-b4981b3cc343.txt",
+      "550b99dd-27de-583f-a386-9df89dcf49e9": "http://localhost:8000/demo-files/550b99dd-27de-583f-a386-9df89dcf49e9.txt",
+      "1d86be2e-b5bd-5eb4-9f22-f5bcd5986ac5": "http://localhost:8000/demo-files/1d86be2e-b5bd-5eb4-9f22-f5bcd5986ac5.txt",
+      "cbcba889-ab77-596a-9d6e-f49cfda342c5": "http://localhost:8000/demo-files/cbcba889-ab77-596a-9d6e-f49cfda342c5.txt",
+      "875bd992-deab-5e0f-8dab-a0d841cbcd95": "http://localhost:8000/demo-files/875bd992-deab-5e0f-8dab-a0d841cbcd95.txt",
+      "b1c19c57-a9fe-5e61-896b-bfd67d6bad2d": "http://localhost:8000/demo-files/b1c19c57-a9fe-5e61-896b-bfd67d6bad2d.txt",
+      "b811a624-2aa1-5f94-a0bf-d8d60e10ef84": "http://localhost:8000/demo-files/b811a624-2aa1-5f94-a0bf-d8d60e10ef84.txt",
+      "d883309c-56b1-5a85-a147-6d1607b6da03": "http://localhost:8000/demo-files/d883309c-56b1-5a85-a147-6d1607b6da03.txt",
+      "6015c9a9-27fc-56f7-9d31-93889282e053": "http://localhost:8000/demo-files/6015c9a9-27fc-56f7-9d31-93889282e053.txt",
+      "bd33ad2b-7b54-5d6f-ba65-2818021140e5": "http://localhost:8000/demo-files/bd33ad2b-7b54-5d6f-ba65-2818021140e5.txt"
+    }
+  },
+  "access": {
+    "free_material_ids": [
+      "f10d2181-75ba-53c6-aaf4-27b5f0c7fe3e",
+      "bb6719d7-1fd0-5246-990a-b4981b3cc343",
+      "10926149-a496-5c22-a447-214125b4d4f4",
+      "550b99dd-27de-583f-a386-9df89dcf49e9",
+      "69a21b00-7910-51b3-b988-5550ea7685eb",
+      "983496e7-e6a3-5855-9bad-a59770ccb84c",
+      "1d86be2e-b5bd-5eb4-9f22-f5bcd5986ac5",
+      "cbcba889-ab77-596a-9d6e-f49cfda342c5",
+      "0daf037f-4135-56f9-8630-ab2f3baf0ba7",
+      "4704f178-cdff-5fea-9466-a76730761317",
+      "875bd992-deab-5e0f-8dab-a0d841cbcd95",
+      "b1c19c57-a9fe-5e61-896b-bfd67d6bad2d",
+      "63a1d9ce-ce8d-5b70-9ddf-77449adeff19",
+      "8da32e43-7a43-5f2e-a2bc-8e4541380396",
+      "b811a624-2aa1-5f94-a0bf-d8d60e10ef84",
+      "d883309c-56b1-5a85-a147-6d1607b6da03",
+      "8ff59323-9472-59b4-96d6-51e620d5cb41",
+      "66263a9c-f26f-5de7-ad30-209d08cbeac5",
+      "6015c9a9-27fc-56f7-9d31-93889282e053",
+      "bd33ad2b-7b54-5d6f-ba65-2818021140e5",
+      "2a0f5fca-f941-5ec0-bb96-f93a277ed7d4",
+      "a453c6a4-5d7c-51a5-a052-8fa95532fe6c",
+      "3df13346-5d52-544b-966d-82f7e1a4633f",
+      "edc21def-2c46-5418-a844-14e850eaf342",
+      "b46374e1-77ea-5a93-92df-0a021e8bd252",
+      "b05ca5a2-6bb4-5478-99de-bceff8e3bc15",
+      "260f17a2-f77f-539d-b97f-8bdead214fcf",
+      "12e427db-62cb-577b-b5ef-057714ccba8c",
+      "650f7dc5-66cc-5c28-9461-5fdbc403ba58",
+      "aafebe4b-d8a4-54b9-9c1e-1feb9fbae9b2",
+      "96e94135-df6f-55bb-ad40-7a8601074625",
+      "436dc678-559f-5cc4-a13d-9c6ae8b90e70"
+    ],
+    "course_prices": {
+      "6d78dae7-6fc0-5cf7-bff8-689287d41a39": {
+        "amount_minor": 199000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "ac3b717e-923e-5e5d-829c-410a6392c5d7": {
+        "amount_minor": 299000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "9a32c605-c803-511d-ba64-b8a33d6e6c44": {
+        "amount_minor": 149000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "0ef1516a-4f82-5285-ac96-6708c85a3c1d": {
+        "amount_minor": 299000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "9c6bab77-a66d-5d81-ace5-1aa0680666c7": {
+        "amount_minor": 199000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "0932cff6-0e69-5c29-9c30-d711776cd9e6": {
+        "amount_minor": 349000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "9e2ca2ec-e5f6-5848-9a3f-387209ed8a78": {
+        "amount_minor": 249000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "e5e6c88d-590a-5c67-be2c-a90c84284ee4": {
+        "amount_minor": 399000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "96834e52-f87f-55a7-a983-e44f0dd6e4ca": {
+        "amount_minor": 299000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "14039568-f846-5872-a645-517f493689a9": {
+        "amount_minor": 449000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "28e2a868-0b58-4fd6-af4d-7aa268ae91b4": {
+        "amount_minor": 199000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "8be9c4dc-d301-4af3-9548-0a091b8cf441": {
+        "amount_minor": 249000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "a25c8282-94c7-458e-abf6-9fbd7b996ef7": {
+        "amount_minor": 299000,
+        "currency": "RUB",
+        "source": "demo_config"
+      },
+      "b3b52649-3f00-4c66-9d0f-8def7c0391b5": {
+        "amount_minor": 349000,
+        "currency": "RUB",
+        "source": "demo_config"
+      }
+    },
+    "offer_order": [
+      "course",
+      "subscription"
+    ]
+  },
+  "subscriptions": {
+    "tariffs": {
+      "ad78212c-f237-5804-88a5-9689f190ab88": {
+        "subscription_id": "847b9578-3023-5176-990d-8e4b3c3a755f",
+        "price": {
+          "amount_minor": 99000,
+          "currency": "RUB",
+          "source": "demo_config"
+        },
+        "duration_months": 1
+      }
+    }
+  },
+  "welcome_discount": {
+    "percent": 10,
+    "duration_days": 7,
+    "first_paid_course_only": true,
+    "subscription_eligible": false
+  },
+  "favorites": {
+    "default_folder_name": "Избранное"
+  },
+  "email": {
+    "delivery": "local_only",
+    "consent_version": "demo-1",
+    "consent_text": "Я согласен получать тестовые маркетинговые письма."
+  },
+  "migration_constraints": {
+    "excluded_tables": [
+      "mvp.events"
+    ],
+    "generation_runs": "Included with nullable references; agreement covers postponing diagnostics.",
+    "source_schema": "Migrations manage public and mvp."
+  }
+}
