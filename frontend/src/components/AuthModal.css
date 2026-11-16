@@ -1,0 +1,270 @@
+/* src/components/AuthModal.css */
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.auth-modal {
+  display: flex;
+  width: 900px;
+  max-width: 95vw;
+  height: 600px;
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Левая часть */
+.auth-left {
+  width: 45%;
+  background: var(--alpha-red);
+  color: #fff;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Декоративные круги на фоне (как на макете) */
+.auth-left::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 60px;
+  z-index: 1;
+}
+
+.auth-logo .logo-a {
+  background: #fff;
+  color: var(--alpha-red);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.logo-title { font-weight: 700; font-size: 18px; }
+.logo-sub { font-size: 12px; opacity: 0.8; }
+
+.auth-promo { z-index: 1; }
+.promo-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.auth-promo h2 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  font-weight: 800;
+}
+
+.auth-promo p {
+  font-size: 15px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.auth-footer-left {
+  margin-top: auto;
+  font-size: 12px;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+/* Правая часть */
+.auth-right {
+  width: 55%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.auth-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #666;
+}
+
+.auth-header {
+  margin-bottom: 32px;
+  margin-top: 20px;
+}
+
+.auth-step {
+  color: var(--alpha-red);
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.auth-header h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.auth-tab.active {
+  border-color: var(--alpha-red);
+  color: var(--alpha-red);
+  background: #fff5f5;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  color: #999;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  border-color: var(--alpha-red);
+}
+
+.input-hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: -8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.btn-primary.w-100 { width: 100%; padding: 14px; font-size: 16px; }
+
+.auth-legal {
+  margin-top: auto;
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.auth-legal a {
+  color: #666;
+  text-decoration: underline;
+}
+/* Стили для иконки "А" внутри кнопки Альфа ID */
+.alfa-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--alpha-red); /* КРАСНЫЙ фон */
+  color: #ffffff;                     /* БЕЛАЯ буква */
+  border-radius: 50%;                 /* Круглая форма */
+  font-weight: 800;                   /* Жирный шрифт */
+  font-size: 14px;
+  margin-right: 8px;                  /* Отступ от текста */
+}
+/* Стили для вкладки Альфа ID */
+.alfa-id-hint {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  text-align: center;
+}

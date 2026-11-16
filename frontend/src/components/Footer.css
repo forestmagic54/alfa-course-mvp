@@ -1,0 +1,105 @@
+/* src/components/Footer.css */
+.footer {
+  background: #fff;
+  border-top: 1px solid #eaeaea;
+  padding: 40px 0 20px 0;
+  margin-top: 80px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 24px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--alpha-red); /* Красный цвет как у Альфа-Банка */
+}
+
+.footer-logo .logo-a {
+  background: var(--alpha-red);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.footer-separator {
+  color: #ccc;
+}
+
+.footer-brand-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-main);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--alpha-red);
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* Адаптив для мобильных (на всякий случай) */
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+.footer-link-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.footer-link-btn:hover {
+  color: var(--alpha-red);
+}

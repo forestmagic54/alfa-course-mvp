@@ -1,0 +1,528 @@
+/* src/pages/ProfilePage.css */
+
+/* Общие стили страницы */
+.profile-page {
+  min-height: 100vh;
+  background: #f8f9fa; /* Чуть более теплый фон */
+}
+
+.profile-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Заголовок */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.profile-header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+
+.profile-subtitle-text {
+  color: #666;
+  font-size: 15px;
+}
+
+.btn-back-home {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  padding: 10px 16px;
+  border-radius: 12px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.btn-back-home:hover {
+  border-color: var(--alpha-red);
+  color: var(--alpha-red);
+  box-shadow: 0 4px 12px rgba(239, 49, 36, 0.1);
+}
+
+/* Верхний блок (Профиль и Подписка) */
+.profile-top-cards {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  gap: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* Мягкая тень */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+
+.profile-card--business {
+  flex: 1;
+  border: 1px solid #fce8e8;
+  background: linear-gradient(135deg, #fffafa 0%, #fff 100%);
+}
+
+.profile-card--subscription {
+  flex: 2;
+  border: 1px solid #eaeaea;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+}
+
+.card-icon {
+  font-size: 36px;
+  background: #fff;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.profile-tags {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.profile-tags span {
+  color: #ccc;
+  margin: 0 4px;
+}
+
+.subscription-left h3 {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.subscription-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.subscription-status strong {
+  font-size: 22px;
+  color: #1a1a1a;
+}
+
+.badge-free {
+  background: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.subscription-desc {
+  font-size: 13px;
+  color: #666;
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+.subscription-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.subscription-price {
+  font-size: 14px;
+  color: #999;
+  font-weight: 500;
+}
+
+/* Кнопки */
+.btn-primary {
+  background: var(--alpha-red);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 4px 12px rgba(239, 49, 36, 0.2);
+}
+
+.btn-primary:hover { 
+  background: #d32f2f; 
+  transform: translateY(-1px);
+}
+
+.btn-primary-small {
+  background: var(--alpha-red);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary-small:hover {
+  background: #d32f2f;
+}
+
+.btn-outline-small {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-small:hover {
+  border-color: var(--alpha-red);
+  color: var(--alpha-red);
+}
+
+/* Блок заголовков секций */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.section-header-row h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.section-count, .section-subtext {
+  font-size: 14px;
+  color: #999;
+}
+
+/* Траектории */
+.trajectories-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.trajectory-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trajectory-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+
+.trajectory-card--active {
+  background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+  border-color: #fce8e8;
+}
+
+.trajectory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.trajectory-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trajectory-icon {
+  font-size: 20px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.trajectory-title h4 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.trajectory-percent {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--alpha-red);
+}
+
+.trajectory-progress-text {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.progress-bar--empty div { background: transparent; }
+
+.progress-bar div {
+  height: 100%;
+  background: linear-gradient(90deg, #ef3124, #ff6b5b); /* Градиент */
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.trajectory-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.trajectory-step-label {
+  font-size: 12px;
+  color: #999;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.trajectory-step-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Фильтры (чипсы) */
+.filters-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.chip {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chip:hover {
+  border-color: var(--alpha-red);
+  color: var(--alpha-red);
+}
+
+.chip.active {
+  background: var(--alpha-red);
+  color: #fff;
+  border-color: var(--alpha-red);
+  box-shadow: 0 4px 12px rgba(239, 49, 36, 0.2);
+}
+
+/* Сохраненные инструменты */
+.saved-materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.saved-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.saved-card:hover {
+  border-color: var(--alpha-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.saved-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.saved-type {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  background: #f9f9f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.bookmark.active {
+  color: var(--alpha-red);
+  font-size: 16px;
+}
+
+.saved-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.saved-meta {
+  font-size: 12px;
+  color: #999;
+  margin-top: auto;
+}
+
+/* Аккордеон */
+.accordion {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.accordion-header {
+  width: 100%;
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  transition: background 0.2s;
+}
+
+.accordion-header:hover {
+  background: #fafafa;
+}
+
+.accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.accordion-arrow {
+  font-size: 12px;
+  color: #999;
+}
+
+.accordion-body {
+  padding: 0 24px 24px 24px;
+  color: #666;
+  font-size: 14px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+/* Список пройденных материалов */
+.completed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.completed-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+}
+
+.completed-type {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.completed-item h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.completed-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.completed-date {
+  font-size: 13px;
+  color: #999;
+}
+
+.completed-check {
+  font-size: 13px;
+  color: #4caf50;
+  font-weight: 600;
+  background: #e8f5e9;
+  padding: 4px 10px;
+  border-radius: 6px;
+}

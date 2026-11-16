@@ -1,0 +1,37 @@
+.success-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1001;
+}
+
+.success-modal {
+  background: #fff;
+  padding: 40px;
+  border-radius: 24px;
+  width: 400px;
+  text-align: center;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.success-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.success-modal h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.success-modal p {
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

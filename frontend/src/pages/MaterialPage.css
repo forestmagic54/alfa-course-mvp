@@ -1,0 +1,398 @@
+/* src/pages/MaterialPage.css */
+.material-page {
+  min-height: 100vh;
+  background: #fcfcfc;
+}
+
+.material-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+/* Верхняя навигация */
+.material-top-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.back-link {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  color: #999;
+}
+
+.material-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 48px;
+  align-items: start; /* Это правильно, но... */
+  margin-top: 20px; /* Добавим небольшой отступ сверху */
+}
+
+/* Левая колонка */
+.material-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn-mark-completed-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--alpha-red);
+  color: var(--alpha-red);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.checkbox-icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--alpha-red);
+  border-radius: 4px;
+}
+
+/* Розовый блок */
+.promo-card {
+  background: #fff5f5;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.promo-label {
+  font-size: 11px;
+  color: #999;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.promo-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.promo-card p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.promo-hint {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  margin-top: 12px;
+}
+
+/* Белая карточка с ценой */
+.price-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 24px;
+  padding: 32px;
+}
+
+.price {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.price-desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.includes h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.includes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.includes li { margin-bottom: 8px; }
+
+.btn-buy {
+  width: 100%;
+  background: var(--alpha-red);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.material-main {
+  padding-top: 0; /* Убираем лишний отступ, если был */
+  position: relative; /* Чтобы элементы не съезжали */
+}
+
+.material-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.course-meta-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.course-meta-tags span {
+  background: #f0f0f0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #333;
+}
+
+.course-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.material-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.bookmark-btn-material {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.bookmark-btn-material:hover { opacity: 0.7; }
+
+.header-price {
+  font-size: 36px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.course-subtitle {
+  font-size: 18px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 800px;
+}
+
+.btn-buy-mobile { display: none; }
+
+.material-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 40px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 40px;
+}
+
+.learn-section h2, .program-section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.learn-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.learn-item {
+  display: flex;
+  gap: 16px;
+}
+
+.learn-number {
+  color: var(--alpha-red);
+  background: #ffeeee;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  height: fit-content;
+}
+
+.learn-item h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.learn-item p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Программа курса */
+.program-subtitle {
+  font-size: 13px;
+  color: #999;
+  margin-top: -16px;
+  margin-bottom: 24px;
+}
+
+.program-list { display: flex; flex-direction: column; }
+
+.program-item {
+  border-bottom: 1px solid #eaeaea;
+  padding: 16px 0;
+}
+
+.program-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.prog-num {
+  font-size: 13px;
+  color: #999;
+  font-weight: 600;
+}
+
+.program-header h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.prog-count {
+  font-size: 13px;
+  color: #999;
+}
+
+.prog-plus {
+  margin-left: auto;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+}
+
+.materials-notice {
+  background: #f5f5f5;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #666;
+  margin-top: 40px;
+}
+
+/* Тост-уведомление */
+.toast-notification {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: slideUp 0.3s ease-out;
+}
+
+.toast-icon {
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (max-width: 900px) {
+  .material-layout { grid-template-columns: 1fr; }
+  .material-columns { grid-template-columns: 1fr; }
+  .header-price { display: none; }
+  .btn-buy-mobile { display: block; margin-bottom: 24px; }
+}
+/* Стили для кнопки "Пройдено" */
+.btn-mark-completed-top.completed {
+  background: #e8f5e9; /* Светло-зеленый фон */
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.check-icon {
+  font-weight: bold;
+  font-size: 16px;
+}
+/* Блок "Продолжите обучение" */
+.recommended-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid #eaeaea;
+}
+
+.recommended-section h2 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.recommended-section p {
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+/* Используем ту же сетку, что и на главной */
+.recommended-section .materials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}

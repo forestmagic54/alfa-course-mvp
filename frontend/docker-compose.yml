@@ -1,0 +1,10 @@
+
+
+services:
+  frontend:
+    build: .                      # Собирает образ из Dockerfile в текущей папке
+    image: forestrain12/alfa-course-frontend:latest  # Имя образа для Docker Hub
+    container_name: alfa-frontend
+    ports:
+      - "3000:80"                 # Пробрасывает 80-й порт контейнера на 3000-й порт хоста
+    restart: unless-stopped

@@ -1,0 +1,225 @@
+/* src/components/Onboarding.css */
+
+.onboarding-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff5f5; /* Светло-розовый фон как на макете */
+  border-radius: 32px;
+  padding: 48px;
+  margin-bottom: 60px;
+  gap: 40px;
+}
+
+/* Левая часть */
+.onboarding-left {
+  width: 40%;
+}
+
+.badge {
+  background: #fff;
+  color: #8b3a3a;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.onboarding-left h2 {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  color: var(--text-main);
+}
+
+.onboarding-left p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Правая часть (Белая карточка) */
+.onboarding-card {
+  width: 55%;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.card-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.step-counter {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Прогресс-бар */
+.progress-bar {
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--alpha-red);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Варианты ответов */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.option:hover {
+  border-color: var(--alpha-red);
+  background: #fffafa;
+}
+
+.option input {
+  accent-color: var(--alpha-red);
+  width: 18px;
+  height: 18px;
+}
+
+/* Кнопки внизу */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.btn-skip {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-skip:hover {
+  text-decoration: underline;
+}
+
+.nav-btns {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-next {
+  background: var(--alpha-red);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-next:hover {
+  background: #d32f2f;
+}
+/* Стили для выпадающего списка (Сфера бизнеса) */
+.select-wrapper {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.option-select {
+  width: 100%;
+  padding: 14px 20px;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  background-color: #fff;
+  cursor: pointer;
+  appearance: none; /* Убираем стандартную стрелку браузера */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  
+  /* Добавляем свою стрелочку */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px top 50%;
+  background-size: 12px auto;
+  transition: border-color 0.2s;
+}
+
+.option-select:focus {
+  outline: none;
+  border-color: var(--alpha-red);
+}
+
+/* Стили для выбранного плейсхолдера (серый текст) */
+.option-select:invalid,
+.option-select option[value=""] {
+  color: #999;
+}
+/* Стили для выбранного варианта */
+.option.selected {
+  border-color: var(--alpha-red);
+  background-color: #fff5f5;
+}
+
+/* Стили для неактивной (серой) кнопки "Далее" */
+.btn-next.disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.btn-next.disabled:hover {
+  background-color: #e0e0e0; /* Убираем эффект при наведении */
+}

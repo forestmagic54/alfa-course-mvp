@@ -1,0 +1,60 @@
+/* src/components/AuthBanner.css */
+.auth-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+/* Стиль для траектории (белый с красной полосой) */
+.auth-banner--trajectory {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-left: 4px solid var(--alpha-red);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.auth-banner--trajectory h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.auth-banner--trajectory p {
+  color: #666;
+  font-size: 14px;
+  max-width: 600px;
+  line-height: 1.4;
+}
+
+/* Стиль для персональной подборки (розовый) */
+.auth-banner--personal {
+  background: #fce8e8;
+  border: 1px solid #f8d7d7;
+}
+
+.auth-banner--personal span {
+  color: #8b3a3a;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.auth-banner-link {
+  background: none;
+  border: none;
+  color: var(--alpha-red);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.auth-banner-link:hover {
+  text-decoration: underline;
+}
+
+.auth-banner-content {
+  flex: 1;
+}
