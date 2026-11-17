@@ -1,1 +1,120 @@
-# A-courses backend
+# 🎓 Альфа-Курс: Умные траектории роста (Frontend)
+
+[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-purple?logo=vite)](https://vitejs.dev/)
+[![Docker](https://img.shields.io/badge/Docker-blue?logo=docker)](https://www.docker.com/)
+
+**🎥 [Видео-демо работы приложения]https://drive.google.com/drive/folders/1sqkEWevDs-ALLXwDG_4-AoR6X-MWXGMA?usp=drive_link**
+
+Прототип (MVP) образовательной платформы с персональными рекомендациями для предпринимателей. Приложение анализирует ответы пользователя, подбирает подходящие курсы, статьи и документы под конкретные задачи бизнеса, генерирует уникальные ИИ-объяснения и строит индивидуальные траектории обучения.
+
+---
+
+## 📸 Скриншоты проекта
+*https://drive.google.com/drive/folders/1t2cbW1SnFhCSYEit739ElIVc8GQaez6I?usp=drive_link*
+
+---
+
+## 🚀 Стек технологий
+* Frontend: React 19, TypeScript, Vite, React Router DOM, CSS.
+* Backend: FastAPI, PostgreSQL, Alembic, Poetry, Cloudflare Workers AI (LLM).
+* Инфраструктура: Docker, Docker Compose, Nginx.
+
+---
+
+## ✨ Основные возможности
+* **Каталог материалов:** Просмотр курсов, статей и документов с фильтрацией по типу.
+* **Онбординг (Анкета):** Интерактивный опрос из 3 шагов для сбора данных о бизнесе.
+* **Персональные рекомендации:** Формирование витрины материалов на основе ответов.
+* **ИИ-объяснения:** Интеграция с LLM через бэкенд для генерации текста «Почему вам подойдёт этот материал» (только для авторизованных).
+* **Карты цели (Траектории):** Построение плана обучения из 3 этапов (Вводный, Практический, Углубленный).
+* **Личный кабинет:** Отслеживание прогресса, сохраненные материалы и история.
+* **Подписка «Курс+»:** Активация демо-подписки для доступа к закрытым материалам.
+
+---
+
+## 🛠 Локальный запуск (Разработка)
+
+1. Установите зависимости:
+   ```bash
+   npm install
+
+(Frontend)
+
+Стек технологий:
+- React 19 (библиотека для построения пользовательских интерфейсов)
+- TypeScript (типизированный JavaScript для надежности кода)
+- Vite (быстрый сборщик и сервер разработки)
+- React Router DOM (навигация между страницами без перезагрузки)
+- CSS (кастомные стили, адаптивная верстка под мобильные устройства)
+- Nginx (веб-сервер для раздачи статики в production)
+
+
+Локальный запуск в режиме разработки:
+Шаг 1. Установите все необходимые зависимости проекта:
+npm install
+
+Шаг 2. Запустите локальный сервер разработки Vite:
+npm run dev
+
+Приложение будет доступно в браузере по адресу: http://localhost:5173.
+Важное примечание: Для корректной работы API запросов (на адрес /api/v1/*) на вашем компьютере должен быть запущен бэкенд, а в файле vite.config.ts должен быть настроен прокси на порт бэкенда.
+
+Сборка и Docker:
+Для production сборки используется многоступенчатый Docker (сборка Node.js и раздача через Nginx).
+
+Шаг 1. Соберите проект локально (опционально, для проверки ошибок):
+npm run build
+
+Шаг 2. Соберите Docker-образ из Dockerfile:
+docker-compose build
+
+Шаг 3. Запустите контейнер в фоновом режиме:
+docker-compose up -d
+
+После запуска фронтенд будет доступен по адресу: http://localhost:3000.
+
+Публикация в Docker Hub:
+Готовый образ опубликован в Docker Hub и готов к деплою на любой сервер.
+Скачать образ: docker pull forestrain12/alfa-course-frontend:latest
+Запустить контейнер: docker run -p 80:80 forestrain12/alfa-course-frontend:latest
+
+Структура проекта:
+src/api.ts - Все запросы к бэкенду (авторизация, получение материалов, генерация ИИ)
+src/components/ - Переиспользуемые UI-компоненты (Header, MaterialCard, Onboarding и др.)
+src/pages/ - Страницы приложения (HomePage, ProfilePage, MaterialPage)
+src/App.tsx - Настройка роутинга приложения
+src/main.tsx - Точка входа в React-приложение
+
+Авторизация и безопасность:
+Приложение использует JWT-токены (JSON Web Tokens) для аутентификации. Токен сохраняется в localStorage браузера и автоматически подставляется в заголовок Authorization: Bearer <token> для всех защищенных эндпоинтов (генерация ИИ-объяснений, сохранение траекторий, активация подписки).
+
+(backend)
+
+API для поиска учебных материалов, персональных рекомендаций и построения карт обучения.
+Настройка
+Перед запуском скопируйте .env.example в .env и настройте в нём Cloudflare Workers AI для работы LLM.
+Значения по умолчанию предназначены только для локальной разработки: для другого окружения задайте уникальные JWT_SECRET и пароль PostgreSQL. Если база уже создана, изменение переменных PostgreSQL в .env не изменит учётные данные существующего volume.
+Для работы LLM:
+
+Зарегистрируйтесь в Cloudflare, откройте Workers AI и выберите Use REST API.
+Создайте токен через Create a Workers AI API Token и скопируйте его и Account ID. Подробнее — в инструкции Cloudflare.
+В .env задайте CLOUDFLARE_API_TOKEN и CLOUDFLARE_ACCOUNT_ID. LLM включена по умолчанию (LLM_ENABLED=true), модель уже указана в .env.example. Если .env был создан ранее, проверьте в нём значение LLM_ENABLED.
+
+Запуск
+Установите Docker с Compose. Для запуска нужны файлы compose.demo.yaml и настроенный .env в одной папке. Выполните в этой папке:
+docker compose -f compose.demo.yaml up -d
+Compose скачает образы backend и frontend, запустит PostgreSQL, применит миграции и загрузит демоданные до запуска API. Сайт доступен на http://localhost:8080, документация API — на http://localhost:8000/api/v1/docs. Для первой загрузки нужна пустая база; данные сохраняются в Docker volume. Образы собраны для linux/arm64.
+Сборка из исходников
+В корне проекта выполните:
+docker compose -f compose.yaml up -d --build
+docker compose -f compose.yaml exec -T backend python -m src.load_demo
+docker compose -f compose.yaml exec -T backend python -m src.sync_materials
+docker compose -f compose.yaml exec -T backend python -m src.import_material_annotations
+docker compose -f compose.yaml exec -T backend python -m src.sync_materials
+Первая команда собирает backend, запускает PostgreSQL и применяет миграции; остальные загружают демоданные в пустую базу и синхронизируют каталог.
+Тестовые данные
+Общий пароль демо-аккаунтов — 0123456789; при загрузке вводить его не нужно. Например, можно войти как cold@example.com; остальные аккаунты и состав набора перечислены в описании демоданных. Материалы, цены и ссылки синтетические; повторная загрузка набора v2 не меняет данные и ранее установленные пароли.
+Документация проекта
+Назначение решения, архитектура.
