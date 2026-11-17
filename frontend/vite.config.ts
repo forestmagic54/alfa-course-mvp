@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://alfa-backend.onrender.com',
+        target: 'https://alfa-course-backend.onrender.com',
         changeOrigin: true,
       },
     },
